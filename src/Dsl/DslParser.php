@@ -18,6 +18,10 @@ final class DslParser
 
     public function parse(string $source, ?string $file = null): GrammarDocument
     {
+        if (str_contains($source, '%%')) {
+            return (new YaccStyleParser())->parse($source, $file);
+        }
+
         $offset = 0;
         $name = null;
         $namespace = null;

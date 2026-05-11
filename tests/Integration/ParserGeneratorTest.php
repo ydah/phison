@@ -301,6 +301,51 @@ LRG);
         self::assertGreaterThan(0, $table->unresolvedConflictCount());
     }
 
+    public function testYaccStyleGrammarCanGenerateParser(): void
+    {
+        $document = (new DslParser())->parse(<<<'Y'
+%name YaccArithmetic
+%namespace Example\YaccGenerated
+%parser YaccArithmeticParser
+%start expr
+
+%token NUMBER "number"
+%token PLUS "+"
+%token MINUS "-"
+%token STAR "*"
+%token SLASH "/"
+%token LPAREN "("
+%token RPAREN ")"
+
+%left PLUS MINUS
+%left STAR SLASH
+%right UMINUS
+
+%%
+
+expr:
+    expr PLUS expr { return $1 + $3; }
+  | expr MINUS expr { return $1 - $3; }
+  | expr STAR expr { return $1 * $3; }
+  | expr SLASH expr { return $1 / $3; }
+  | MINUS expr %prec UMINUS { return -$2; }
+  | LPAREN expr RPAREN { return $2; }
+  | NUMBER { return (int) $1; }
+;
+Y);
+
+        $grammar = (new GrammarNormalizer())->normalize($document);
+        $collection = (new CanonicalLr1ThenMergeBuilder())->build($grammar);
+        $table = (new ParseTableBuilder())->build($grammar, $collection);
+
+        self::assertSame('YaccArithmetic', $grammar->name);
+        self::assertSame(0, $table->unresolvedConflictCount());
+
+        $code = (new ParserEmitter())->emit($grammar, $table, new CodegenOptions())->contents;
+        self::assertStringContainsString('$yyval = $v1 + $v3;', $code);
+        self::assertStringContainsString('$yyval = -$v2;', $code);
+    }
+
     public function testGeneratedParserMatchesGoldenFile(): void
     {
         $generated = (new ParserEmitter())->emit(self::$grammar, self::$table, new CodegenOptions())->contents;
