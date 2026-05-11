@@ -10,4 +10,7 @@ if (is_file($autoload)) {
     require __DIR__ . '/../src/autoload.php';
 }
 
-exit((new Phison\Cli\Application())->run($argv));
+/** @var list<string> $arguments */
+$arguments = $_SERVER['argv'] ?? [];
+
+exit((new Phison\Cli\Application())->run($arguments));
