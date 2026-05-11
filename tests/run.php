@@ -12,6 +12,7 @@ use Phison\Dsl\DslParser;
 use Phison\Grammar\GrammarNormalizer;
 use Phison\Lalr\CanonicalLr1ThenMergeBuilder;
 use Phison\Lalr\ParseTableBuilder;
+use Phison\Runtime\ParseError;
 
 $grammarFile = __DIR__ . '/../examples/arithmetic/arithmetic.y';
 $outputFile = __DIR__ . '/../examples/arithmetic/Generated/ArithmeticParser.php';
@@ -66,6 +67,24 @@ foreach (['array', 'switch', 'packed', 'hybrid'] as $layout) {
     $actual = (new $parserClass())->parse((new ArithmeticLexer('1 + 2 * (3 + 4)'))->tokens());
     if ($actual !== 15) {
         throw new RuntimeException('Expected ' . $layout . ' layout parser to return 15, got ' . (string) $actual);
+    }
+}
+
+$syntaxError = null;
+try {
+    (new ArithmeticParser())->parse((new ArithmeticLexer('1 + * 2'))->tokens());
+} catch (ParseError $error) {
+    $syntaxError = $error;
+}
+
+if (!$syntaxError instanceof ParseError) {
+    throw new RuntimeException('Expected invalid arithmetic input to throw ParseError.');
+}
+
+$message = $syntaxError->getMessage();
+foreach (['Unexpected token STAR("*")', 'expected number, -, (', 'Previous tokens: NUMBER("1"), PLUS("+")', 'Next tokens: NUMBER("2"), EOF'] as $expectedText) {
+    if (!str_contains($message, $expectedText)) {
+        throw new RuntimeException('ParseError message is missing: ' . $expectedText . "\n" . $message);
     }
 }
 
