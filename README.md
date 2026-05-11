@@ -52,7 +52,8 @@ bin/phison generate examples/arithmetic/arithmetic.y \
 - `--target-php=8.2|8.3|8.4|8.5` controls generated PHP syntax. PHP 8.3+
   targets use typed class constants and `#[\Override]` interface checks.
 - `--table-layout=array|switch|packed|hybrid` controls ACTION/GOTO lookup
-  generation.
+  generation. The packed layout uses row sharing plus checked default
+  reductions for repeated reduce actions.
 - `--report` writes a Markdown grammar, conflict, and state report.
 - `--html-report` writes the same report as a standalone HTML file.
 - `--dump-automaton` prints or writes the LALR automaton.

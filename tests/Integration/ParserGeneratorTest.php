@@ -6,6 +6,7 @@ namespace Phison\Tests\Integration;
 
 use Example\Arithmetic\ArithmeticLexer;
 use Phison\CodeGen\CodegenOptions;
+use Phison\CodeGen\PackedTableBuilder;
 use Phison\CodeGen\ParserEmitter;
 use Phison\Dsl\DslParser;
 use Phison\Grammar\Grammar;
@@ -179,6 +180,45 @@ LRG);
         };
 
         self::assertSame('empty', (new $parserClass())->parse($stream));
+    }
+
+    public function testPackedLayoutUsesDominantDefaultReductionsWithoutChangingErrors(): void
+    {
+        $namespace = 'Example\\Arithmetic\\GeneratedDominantDefault';
+        $className = 'DominantDefaultParser';
+        $output = sys_get_temp_dir() . '/' . $className . '.php';
+        $code = (new ParserEmitter())->emit(
+            self::$grammar,
+            self::$table,
+            new CodegenOptions($namespace, $className, '8.2', 'packed'),
+        )->contents;
+
+        self::assertStringContainsString('private const ACTION_DEFAULT_CHECK = array (', $code);
+        self::assertStringContainsString('2 => -8', $code);
+
+        file_put_contents($output, $code);
+        require_once $output;
+
+        $parserClass = $namespace . '\\' . $className;
+        try {
+            (new $parserClass())->parse((new ArithmeticLexer('1 + * 2'))->tokens());
+            self::fail('Expected invalid arithmetic input to throw ParseError.');
+        } catch (ParseError $error) {
+            self::assertStringContainsString('Unexpected token STAR("*")', $error->getMessage());
+        }
+    }
+
+    public function testPackedTableBuilderSharesIdenticalRows(): void
+    {
+        $table = (new PackedTableBuilder())->packRows([
+            10 => [1 => 20, 2 => 30],
+            11 => [1 => 20, 2 => 30],
+            12 => [1 => 40],
+        ]);
+
+        self::assertSame($table->rowForState[10], $table->rowForState[11]);
+        self::assertNotSame($table->rowForState[10], $table->rowForState[12]);
+        self::assertCount(2, $table->base);
     }
 
     /**

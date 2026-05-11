@@ -7,7 +7,6 @@ namespace Phison\CodeGen;
 use Phison\Grammar\Grammar;
 use Phison\Grammar\Production;
 use Phison\Grammar\SymbolRef;
-use Phison\Grammar\Terminal;
 use Phison\Lalr\ParseTable;
 
 final class ParserEmitter
@@ -58,7 +57,6 @@ final class ParserEmitter
                 $table->gotos,
                 $options->tableLayout,
                 $profile,
-                array_values(array_map(static fn (Terminal $terminal): int => $terminal->id, $grammar->terminalsById)),
             ),
         );
         $lines[] = '';
