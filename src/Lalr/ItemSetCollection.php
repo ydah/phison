@@ -12,7 +12,8 @@ final class ItemSetCollection
     public function __construct(
         public readonly array $states,
         public readonly int $canonicalStateCount,
-    ) {}
+    ) {
+    }
 
     public function state(int $id): LrItemSet
     {

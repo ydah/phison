@@ -11,5 +11,6 @@ final class CodegenOptions
         public readonly ?string $className = null,
         public readonly string $targetPhp = '8.2',
         public readonly string $tableLayout = 'array',
-    ) {}
+    ) {
+    }
 }

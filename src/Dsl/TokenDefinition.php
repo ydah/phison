@@ -9,5 +9,6 @@ final class TokenDefinition
     public function __construct(
         public readonly string $name,
         public readonly ?string $display = null,
-    ) {}
+    ) {
+    }
 }

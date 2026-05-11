@@ -12,5 +12,6 @@ final class GrammarIssue
     public function __construct(
         public readonly string $severity,
         public readonly string $message,
-    ) {}
+    ) {
+    }
 }

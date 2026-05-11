@@ -10,5 +10,6 @@ final class Precedence
         public readonly string $symbol,
         public readonly int $level,
         public readonly string $associativity,
-    ) {}
+    ) {
+    }
 }

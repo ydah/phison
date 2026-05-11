@@ -17,5 +17,6 @@ final class PrecedenceDeclaration
     public function __construct(
         public readonly string $associativity,
         public readonly array $symbols,
-    ) {}
+    ) {
+    }
 }

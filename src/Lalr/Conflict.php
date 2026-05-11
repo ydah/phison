@@ -18,5 +18,6 @@ final class Conflict
         public readonly int $incomingAction,
         public readonly bool $resolved,
         public readonly ?string $resolution,
-    ) {}
+    ) {
+    }
 }

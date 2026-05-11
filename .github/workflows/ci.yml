@@ -46,6 +46,12 @@ jobs:
       - name: Run tests
         run: composer test
 
+      - name: Run static analysis
+        run: composer phpstan
+
+      - name: Check coding style
+        run: composer cs-check
+
       - name: Validate arithmetic grammar
         run: composer validate:example
 

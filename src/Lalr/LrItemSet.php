@@ -16,7 +16,8 @@ final class LrItemSet
         public readonly int $id,
         public readonly array $items,
         public readonly array $transitions = [],
-    ) {}
+    ) {
+    }
 
     public static function symbolKey(Symbol $symbol): string
     {

@@ -22,7 +22,8 @@ final class ParseTable
         public readonly array $gotos,
         public readonly array $expected,
         public readonly array $conflicts,
-    ) {}
+    ) {
+    }
 
     public function unresolvedConflictCount(): int
     {

@@ -12,5 +12,6 @@ final class RuleDefinition
     public function __construct(
         public readonly string $name,
         public readonly array $productions,
-    ) {}
+    ) {
+    }
 }

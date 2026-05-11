@@ -14,7 +14,8 @@ final class SourceRange
         public readonly int $startColumn,
         public readonly int $endLine,
         public readonly int $endColumn,
-    ) {}
+    ) {
+    }
 
     public static function unknown(): self
     {

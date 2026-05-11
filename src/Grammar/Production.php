@@ -18,7 +18,8 @@ final class Production
         public readonly ?ActionCode $action,
         public readonly ?Precedence $precedence,
         public readonly ?string $precedenceSymbol = null,
-    ) {}
+    ) {
+    }
 
     public function length(): int
     {

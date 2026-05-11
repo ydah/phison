@@ -31,7 +31,8 @@ final class Grammar
         public readonly array $productions,
         public readonly array $productionsByLhs,
         public readonly array $precedencesBySymbol,
-    ) {}
+    ) {
+    }
 
     public function terminal(string $name): Terminal
     {

@@ -15,7 +15,7 @@ final class FirstSet
     private array $firstByNonTerminal = [];
 
     public function __construct(
-        private readonly Grammar $grammar,
+        Grammar $grammar,
         private readonly NullableSet $nullable,
     ) {
         foreach ($grammar->nonTerminalsById as $nonTerminal) {

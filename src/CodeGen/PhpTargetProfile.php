@@ -12,7 +12,8 @@ final class PhpTargetProfile
         public readonly bool $supportsEnum,
         public readonly bool $supportsMatch,
         public readonly bool $supportsTypedConstants,
-    ) {}
+    ) {
+    }
 
     public static function forVersion(string $version): self
     {

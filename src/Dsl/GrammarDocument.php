@@ -19,5 +19,6 @@ final class GrammarDocument
         public readonly array $tokens,
         public readonly array $precedences,
         public readonly array $rules,
-    ) {}
+    ) {
+    }
 }

@@ -13,7 +13,8 @@ final class ArithmeticLexer
 {
     public function __construct(
         private readonly string $source,
-    ) {}
+    ) {
+    }
 
     public function tokens(): TokenStreamInterface
     {
@@ -107,7 +108,8 @@ final class Token implements TokenInterface
         private readonly string $name,
         private readonly mixed $value,
         private readonly SourceRange $location,
-    ) {}
+    ) {
+    }
 
     public function id(): int
     {
@@ -136,7 +138,8 @@ final class ArrayTokenStream implements TokenStreamInterface
     public function __construct(
         private readonly array $tokens,
         private int $index = 0,
-    ) {}
+    ) {
+    }
 
     public function current(): TokenInterface
     {

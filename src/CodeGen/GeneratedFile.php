@@ -8,5 +8,6 @@ final class GeneratedFile
 {
     public function __construct(
         public readonly string $contents,
-    ) {}
+    ) {
+    }
 }

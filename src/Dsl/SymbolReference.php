@@ -9,5 +9,6 @@ final class SymbolReference
     public function __construct(
         public readonly string $name,
         public readonly ?string $label = null,
-    ) {}
+    ) {
+    }
 }

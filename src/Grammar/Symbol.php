@@ -9,7 +9,8 @@ abstract class Symbol
     public function __construct(
         public readonly int $id,
         public readonly string $name,
-    ) {}
+    ) {
+    }
 
     abstract public function isTerminal(): bool;
 }

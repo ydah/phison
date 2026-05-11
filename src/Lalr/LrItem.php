@@ -10,7 +10,8 @@ final class LrItem
         public readonly int $productionId,
         public readonly int $position,
         public readonly int $lookaheadTerminalId,
-    ) {}
+    ) {
+    }
 
     public function key(): string
     {

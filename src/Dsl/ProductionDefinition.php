@@ -13,5 +13,6 @@ final class ProductionDefinition
         public readonly array $rhs,
         public readonly ActionCode $action,
         public readonly ?string $precedenceSymbol = null,
-    ) {}
+    ) {
+    }
 }

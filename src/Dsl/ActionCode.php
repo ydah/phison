@@ -8,5 +8,6 @@ final class ActionCode
 {
     public function __construct(
         public readonly string $code,
-    ) {}
+    ) {
+    }
 }
