@@ -12,15 +12,16 @@ final class PhpTargetProfile
         public readonly bool $supportsEnum,
         public readonly bool $supportsMatch,
         public readonly bool $supportsTypedConstants,
+        public readonly bool $supportsOverrideAttribute,
     ) {
     }
 
     public static function forVersion(string $version): self
     {
         return match ($version) {
-            '8.2' => new self($version, true, true, true, false),
-            '8.3' => new self($version, true, true, true, true),
-            '8.4', '8.5' => new self($version, true, true, true, true),
+            '8.2' => new self($version, true, true, true, false, false),
+            '8.3' => new self($version, true, true, true, true, true),
+            '8.4', '8.5' => new self($version, true, true, true, true, true),
             default => throw new \InvalidArgumentException('Unsupported PHP target: ' . $version),
         };
     }

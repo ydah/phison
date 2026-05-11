@@ -49,7 +49,7 @@ final class ParserEmitter
         $lines[] = $this->constArray($profile, 'PRODUCTION_LHS', array_map(static fn (Production $production): int => $production->lhs->id, $grammar->productions));
         $lines[] = $this->constArray($profile, 'EXPECTED', $table->expected);
         $lines[] = '';
-        $lines[] = $this->parseMethod();
+        $lines[] = $this->parseMethod($profile);
         $lines[] = '';
         array_push(
             $lines,
@@ -87,9 +87,9 @@ final class ParserEmitter
         return $profile->supportsTypedConstants ? $type . ' ' : '';
     }
 
-    private function parseMethod(): string
+    private function parseMethod(PhpTargetProfile $profile): string
     {
-        return <<<'PHP'
+        return ($profile->supportsOverrideAttribute ? "    #[\\Override]\n" : '') . <<<'PHP'
     public function parse(TokenStreamInterface $tokens, mixed $context = null): mixed
     {
         $stateStack = [0];

@@ -199,8 +199,10 @@ LRG);
 
         self::assertStringNotContainsString('public const int T_EOF', $php82Code);
         self::assertStringNotContainsString('private const array TOKEN_NAMES', $php82Code);
+        self::assertStringNotContainsString('#[\\Override]', $php82Code);
         self::assertStringContainsString('public const int T_EOF', $php83Code);
         self::assertStringContainsString('private const array TOKEN_NAMES', $php83Code);
+        self::assertStringContainsString('#[\\Override]', $php83Code);
     }
 
     public function testParseErrorMessageIncludesContextTokens(): void

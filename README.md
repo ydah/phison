@@ -50,7 +50,7 @@ bin/phison generate examples/arithmetic/arithmetic.y \
 
 - `--namespace` and `--class` override the generated parser name.
 - `--target-php=8.2|8.3|8.4|8.5` controls generated PHP syntax. PHP 8.3+
-  targets use typed class constants.
+  targets use typed class constants and `#[\Override]` interface checks.
 - `--table-layout=array|switch|packed|hybrid` controls ACTION/GOTO lookup
   generation.
 - `--report` writes a Markdown grammar, conflict, and state report.
