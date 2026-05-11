@@ -16,6 +16,7 @@ use Phison\Lalr\ItemSetCollection;
 use Phison\Lalr\ParseTable;
 use Phison\Lalr\ParseTableBuilder;
 use Phison\Report\AutomatonReport;
+use Phison\Report\HtmlReport;
 use Phison\Report\MarkdownReport;
 
 final class Application
@@ -80,13 +81,11 @@ final class Application
         }
 
         if (isset($options['report'])) {
-            $report = (new MarkdownReport())->render($grammar, $collection, $table);
-            $reportDirectory = dirname($options['report']);
-            if ($reportDirectory !== '' && $reportDirectory !== '.' && !is_dir($reportDirectory) && !mkdir($reportDirectory, 0777, true) && !is_dir($reportDirectory)) {
-                throw new \RuntimeException('Unable to create report directory: ' . $reportDirectory);
-            }
+            $this->writeReport($options['report'], (new MarkdownReport())->render($grammar, $collection, $table), 'Markdown report');
+        }
 
-            file_put_contents($options['report'], $report);
+        if (isset($options['html-report'])) {
+            $this->writeReport($options['html-report'], (new HtmlReport())->render($grammar, $collection, $table), 'HTML report');
         }
 
         fwrite(STDOUT, 'Generated ' . $output . "\n");
@@ -146,7 +145,7 @@ final class Application
     {
         fwrite(STDOUT, <<<'TEXT'
 Usage:
-  phison generate <grammar.y> --output <Parser.php> [--namespace Ns] [--class Parser] [--report report.md] [--dump-automaton dump.txt]
+  phison generate <grammar.y> --output <Parser.php> [--namespace Ns] [--class Parser] [--report report.md] [--html-report report.html] [--dump-automaton dump.txt]
   phison validate <grammar.y>
   phison inspect <grammar.y> [--state N]
 
@@ -289,6 +288,18 @@ TEXT);
 
         if (file_put_contents($target, $dump) === false) {
             throw new \RuntimeException('Unable to write automaton dump: ' . $target);
+        }
+    }
+
+    private function writeReport(string $path, string $contents, string $label): void
+    {
+        $directory = dirname($path);
+        if ($directory !== '' && $directory !== '.' && !is_dir($directory) && !mkdir($directory, 0777, true) && !is_dir($directory)) {
+            throw new \RuntimeException('Unable to create ' . $label . ' directory: ' . $directory);
+        }
+
+        if (file_put_contents($path, $contents) === false) {
+            throw new \RuntimeException('Unable to write ' . $label . ': ' . $path);
         }
     }
 }

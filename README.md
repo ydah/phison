@@ -45,6 +45,7 @@ bin/phison generate examples/arithmetic/arithmetic.y \
 - `--table-layout=array|switch|packed|hybrid` controls ACTION/GOTO lookup
   generation.
 - `--report` writes a Markdown grammar, conflict, and state report.
+- `--html-report` writes the same report as a standalone HTML file.
 - `--dump-automaton` prints or writes the LALR automaton.
 - `--lint` runs `php -l` on the generated parser.
 

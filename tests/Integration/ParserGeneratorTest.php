@@ -375,6 +375,16 @@ Y);
         $this->assertMatchesGolden('arithmetic-automaton.golden.txt', $report);
     }
 
+    public function testHtmlReportContainsConflictDetails(): void
+    {
+        $report = (new \Phison\Report\HtmlReport())->render(self::$grammar, self::$collection, self::$table);
+
+        self::assertStringContainsString('<!doctype html>', $report);
+        self::assertStringContainsString('Witness tokens:', $report);
+        self::assertStringContainsString('Merged canonical states:', $report);
+        self::assertStringContainsString('<pre><code>State', $report);
+    }
+
     private function buildTable(string $source): ParseTable
     {
         $document = (new DslParser())->parse($source);
