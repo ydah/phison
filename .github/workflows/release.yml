@@ -1,27 +1,17 @@
-name: CI
+name: Release
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
+    tags:
+      - 'v*'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  test:
-    name: PHP ${{ matrix.php-version }}
+  release:
+    name: Verify and publish release
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version:
-          - '8.2'
-          - '8.3'
-          - '8.4'
-          - '8.5'
 
     steps:
       - name: Checkout
@@ -30,7 +20,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: '8.4'
           tools: composer:v2
           coverage: none
 
@@ -63,3 +53,8 @@ jobs:
 
       - name: Run benchmark smoke test
         run: php benchmarks/arithmetic.php 1000 packed
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${GITHUB_REF_NAME}" --verify-tag --title "${GITHUB_REF_NAME}" --generate-notes

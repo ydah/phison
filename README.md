@@ -4,6 +4,15 @@ Phison is a dependency-free LALR(1) parser generator for PHP. It reads a
 small `.y` grammar DSL and emits a PHP parser class that consumes an
 external `TokenStreamInterface`.
 
+## Install
+
+```bash
+composer require ydah/phison --dev
+```
+
+Use `vendor/bin/phison` from installed projects, or `bin/phison` when working
+from this repository.
+
 ## Generate a parser
 
 ```bash
@@ -58,6 +67,12 @@ php benchmarks/arithmetic.php 50000 packed
 
 The arithmetic benchmark regenerates the example parser in a temporary file
 and reports elapsed time plus parses per second for the selected table layout.
+
+## Releases
+
+Release tags use `vMAJOR.MINOR.PATCH` and are intended to be published through
+Packagist. See [docs/release.md](docs/release.md) for the versioning policy and
+release checklist.
 
 ## DSL sketch
 

@@ -3,6 +3,17 @@
   "description": "A LALR(1) parser generator for PHP.",
   "type": "library",
   "license": "MIT",
+  "homepage": "https://github.com/ydah/phison",
+  "keywords": [
+    "lalr",
+    "parser-generator",
+    "php",
+    "yacc"
+  ],
+  "support": {
+    "issues": "https://github.com/ydah/phison/issues",
+    "source": "https://github.com/ydah/phison"
+  },
   "require": {
     "php": ">=8.2 <9.0"
   },
