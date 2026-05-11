@@ -1,0 +1,25 @@
+{
+  "name": "ydah/phison",
+  "description": "A LALR(1) parser generator for PHP.",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": ">=8.2 <9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Phison\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Phison\\Tests\\": "tests/"
+    }
+  },
+  "bin": [
+    "bin/phison"
+  ],
+  "scripts": {
+    "test": "php tests/run.php"
+  }
+}

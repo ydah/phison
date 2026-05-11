@@ -1,0 +1,27 @@
+# Dependencies
+/vendor/
+
+# Composer local artifacts
+/composer.phar
+
+# Build and test output
+/build/
+/coverage/
+/.phpunit.cache/
+/.php-cs-fixer.cache
+/phpstan.neon.cache
+
+# Generated examples
+/examples/arithmetic/Generated/
+/examples/arithmetic/report.md
+
+# Local environment
+/.env
+/.env.*
+!/.env.example
+
+# Editor and OS files
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db
