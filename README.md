@@ -26,6 +26,16 @@ bin/phison generate examples/arithmetic/arithmetic.y \
 The generator does not create a lexer. Grammar files embed PHP semantic
 actions and must be treated as trusted source code.
 
+## Run examples
+
+```bash
+composer generate:examples
+composer run:examples
+```
+
+The example catalog includes arithmetic, JSON, CSV, filter-query, and
+INI-like config parsers. See [examples/README.md](examples/README.md).
+
 ## Validate a grammar
 
 ```bash

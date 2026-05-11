@@ -10,7 +10,7 @@ $finder = PhpCsFixer\Finder::create()
         __DIR__ . '/benchmarks',
     ])
     ->exclude([
-        'arithmetic/Generated',
+        'Generated',
         'Fixtures/expected',
     ])
     ->append([

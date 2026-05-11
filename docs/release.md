@@ -37,9 +37,9 @@ page after pushing a tag.
    composer test
    composer phpstan
    composer cs-check
-   composer validate:example
-   composer generate:example
-   composer run:example
+   composer validate:examples
+   composer generate:examples
+   composer run:examples
    composer benchmark
    ```
 

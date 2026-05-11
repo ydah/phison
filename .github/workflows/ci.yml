@@ -52,14 +52,14 @@ jobs:
       - name: Check coding style
         run: composer cs-check
 
-      - name: Validate arithmetic grammar
-        run: composer validate:example
+      - name: Validate example grammars
+        run: composer validate:examples
 
-      - name: Generate arithmetic parser
-        run: composer generate:example
+      - name: Generate example parsers
+        run: composer generate:examples
 
-      - name: Run arithmetic example
-        run: composer run:example
+      - name: Run examples
+        run: composer run:examples
 
       - name: Run benchmark smoke test
         run: php benchmarks/arithmetic.php 1000 packed

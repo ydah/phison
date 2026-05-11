@@ -42,8 +42,11 @@
     "cs-check": "php-cs-fixer fix --dry-run --diff",
     "cs-fix": "php-cs-fixer fix",
     "benchmark": "php benchmarks/arithmetic.php",
-    "validate:example": "php bin/phison validate examples/arithmetic/arithmetic.y",
-    "generate:example": "php bin/phison generate examples/arithmetic/arithmetic.y --output examples/arithmetic/Generated/ArithmeticParser.php --report examples/arithmetic/report.md --lint",
-    "run:example": "php examples/arithmetic/run.php \"1 + 2 * (3 + 4)\""
+    "validate:example": "php examples/manage.php validate arithmetic",
+    "generate:example": "php examples/manage.php generate arithmetic",
+    "run:example": "php examples/manage.php run arithmetic",
+    "validate:examples": "php examples/manage.php validate",
+    "generate:examples": "php examples/manage.php generate",
+    "run:examples": "php examples/manage.php run"
   }
 }

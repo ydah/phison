@@ -12,8 +12,8 @@
 /phpstan.neon.cache
 
 # Generated examples
-/examples/arithmetic/Generated/
-/examples/arithmetic/report.md
+/examples/*/Generated/
+/examples/*/report.*
 
 # Local environment
 /.env
