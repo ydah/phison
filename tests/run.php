@@ -70,6 +70,16 @@ foreach (['array', 'switch', 'packed', 'hybrid'] as $layout) {
     }
 }
 
+$php82Code = (new ParserEmitter())->emit($grammar, $table, new CodegenOptions('Example\\Target82', 'Target82Parser', '8.2'))->contents;
+if (str_contains($php82Code, 'public const int T_EOF') || str_contains($php82Code, 'private const array TOKEN_NAMES')) {
+    throw new RuntimeException('PHP 8.2 target must not emit typed class constants.');
+}
+
+$php83Code = (new ParserEmitter())->emit($grammar, $table, new CodegenOptions('Example\\Target83', 'Target83Parser', '8.3'))->contents;
+if (!str_contains($php83Code, 'public const int T_EOF') || !str_contains($php83Code, 'private const array TOKEN_NAMES')) {
+    throw new RuntimeException('PHP 8.3 target should emit typed class constants.');
+}
+
 $syntaxError = null;
 try {
     (new ArithmeticParser())->parse((new ArithmeticLexer('1 + * 2'))->tokens());

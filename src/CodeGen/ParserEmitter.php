@@ -13,7 +13,7 @@ final class ParserEmitter
 {
     public function emit(Grammar $grammar, ParseTable $table, CodegenOptions $options): GeneratedFile
     {
-        PhpTargetProfile::forVersion($options->targetPhp);
+        $profile = PhpTargetProfile::forVersion($options->targetPhp);
 
         $namespace = $options->namespace ?? $grammar->namespace;
         $className = $options->className ?? $grammar->parserClass ?? ($grammar->name . 'Parser');
@@ -38,19 +38,19 @@ final class ParserEmitter
         $lines[] = '{';
 
         foreach ($grammar->terminalsById as $terminal) {
-            $lines[] = '    public const T_' . $terminal->name . ' = ' . $terminal->id . ';';
+            $lines[] = '    public const ' . $this->constantType($profile, 'int') . 'T_' . $terminal->name . ' = ' . $terminal->id . ';';
         }
 
         $lines[] = '';
-        $lines[] = $this->constArray('TOKEN_NAMES', array_map(static fn ($terminal): string => $terminal->name, $grammar->terminalsById));
-        $lines[] = $this->constArray('TOKEN_DISPLAY', array_map(static fn ($terminal): string => $terminal->displayName ?? $terminal->name, $grammar->terminalsById));
-        $lines[] = $this->constArray('PRODUCTION_LENGTH', array_map(static fn (Production $production): int => $production->length(), $grammar->productions));
-        $lines[] = $this->constArray('PRODUCTION_LHS', array_map(static fn (Production $production): int => $production->lhs->id, $grammar->productions));
-        $lines[] = $this->constArray('EXPECTED', $table->expected);
+        $lines[] = $this->constArray($profile, 'TOKEN_NAMES', array_map(static fn ($terminal): string => $terminal->name, $grammar->terminalsById));
+        $lines[] = $this->constArray($profile, 'TOKEN_DISPLAY', array_map(static fn ($terminal): string => $terminal->displayName ?? $terminal->name, $grammar->terminalsById));
+        $lines[] = $this->constArray($profile, 'PRODUCTION_LENGTH', array_map(static fn (Production $production): int => $production->length(), $grammar->productions));
+        $lines[] = $this->constArray($profile, 'PRODUCTION_LHS', array_map(static fn (Production $production): int => $production->lhs->id, $grammar->productions));
+        $lines[] = $this->constArray($profile, 'EXPECTED', $table->expected);
         $lines[] = '';
         $lines[] = $this->parseMethod();
         $lines[] = '';
-        array_push($lines, ...(new TableEmitter())->emit($table->actions, $table->gotos, $options->tableLayout));
+        array_push($lines, ...(new TableEmitter())->emit($table->actions, $table->gotos, $options->tableLayout, $profile));
         $lines[] = '';
         $lines[] = $this->expectedNamesMethod();
         $lines[] = '';
@@ -64,12 +64,17 @@ final class ParserEmitter
     /**
      * @param mixed $value
      */
-    private function constArray(string $name, $value): string
+    private function constArray(PhpTargetProfile $profile, string $name, $value): string
     {
         $export = var_export($value, true);
         $export = preg_replace('/^/m', '    ', $export);
 
-        return '    private const ' . $name . ' = ' . ltrim((string) $export) . ';';
+        return '    private const ' . $this->constantType($profile, 'array') . $name . ' = ' . ltrim((string) $export) . ';';
+    }
+
+    private function constantType(PhpTargetProfile $profile, string $type): string
+    {
+        return $profile->supportsTypedConstants ? $type . ' ' : '';
     }
 
     private function parseMethod(): string

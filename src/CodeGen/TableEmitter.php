@@ -11,14 +11,14 @@ final class TableEmitter
      * @param array<int, array<int, int>> $gotos
      * @return list<string>
      */
-    public function emit(array $actions, array $gotos, string $layout): array
+    public function emit(array $actions, array $gotos, string $layout, PhpTargetProfile $profile): array
     {
         $layout = $this->resolveLayout($actions, $layout);
 
         return match ($layout) {
-            TableLayout::ARRAY => $this->emitArrayTables($actions, $gotos),
+            TableLayout::ARRAY => $this->emitArrayTables($actions, $gotos, $profile),
             TableLayout::SWITCH => $this->emitSwitchTables($actions, $gotos),
-            TableLayout::PACKED => $this->emitPackedTables($actions, $gotos),
+            TableLayout::PACKED => $this->emitPackedTables($actions, $gotos, $profile),
             default => throw new \InvalidArgumentException('Unsupported table layout: ' . $layout),
         };
     }
@@ -58,11 +58,11 @@ final class TableEmitter
      * @param array<int, array<int, int>> $gotos
      * @return list<string>
      */
-    private function emitArrayTables(array $actions, array $gotos): array
+    private function emitArrayTables(array $actions, array $gotos, PhpTargetProfile $profile): array
     {
         return [
-            $this->constArray('ACTION', $actions),
-            $this->constArray('GOTO', $gotos),
+            $this->constArray($profile, 'ACTION', $actions),
+            $this->constArray($profile, 'GOTO', $gotos),
             '',
             <<<'PHP'
     private function action(int $state, int $token): ?int
@@ -99,18 +99,18 @@ PHP,
      * @param array<int, array<int, int>> $gotos
      * @return list<string>
      */
-    private function emitPackedTables(array $actions, array $gotos): array
+    private function emitPackedTables(array $actions, array $gotos, PhpTargetProfile $profile): array
     {
         $action = $this->pack($actions);
         $goto = $this->pack($gotos);
 
         return [
-            $this->constArray('ACTION_BASE', $action['base']),
-            $this->constArray('ACTION_CHECK', $action['check']),
-            $this->constArray('ACTION_VALUE', $action['value']),
-            $this->constArray('GOTO_BASE', $goto['base']),
-            $this->constArray('GOTO_CHECK', $goto['check']),
-            $this->constArray('GOTO_VALUE', $goto['value']),
+            $this->constArray($profile, 'ACTION_BASE', $action['base']),
+            $this->constArray($profile, 'ACTION_CHECK', $action['check']),
+            $this->constArray($profile, 'ACTION_VALUE', $action['value']),
+            $this->constArray($profile, 'GOTO_BASE', $goto['base']),
+            $this->constArray($profile, 'GOTO_CHECK', $goto['check']),
+            $this->constArray($profile, 'GOTO_VALUE', $goto['value']),
             '',
             <<<'PHP'
     private function action(int $state, int $token): ?int
@@ -219,11 +219,13 @@ PHP,
     /**
      * @param mixed $value
      */
-    private function constArray(string $name, $value): string
+    private function constArray(PhpTargetProfile $profile, string $name, $value): string
     {
         $export = var_export($value, true);
         $export = preg_replace('/^/m', '    ', $export);
 
-        return '    private const ' . $name . ' = ' . ltrim((string) $export) . ';';
+        $type = $profile->supportsTypedConstants ? 'array ' : '';
+
+        return '    private const ' . $type . $name . ' = ' . ltrim((string) $export) . ';';
     }
 }
