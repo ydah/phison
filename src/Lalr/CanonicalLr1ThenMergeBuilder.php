@@ -174,9 +174,11 @@ final class CanonicalLr1ThenMergeBuilder
 
         $mergedIdByCanonicalId = [];
         $itemsByMergedId = [];
+        $canonicalStateIdsByMergedId = [];
         $mergedId = 0;
         foreach ($groups as $canonicalIds) {
             $items = [];
+            sort($canonicalIds, SORT_NUMERIC);
             foreach ($canonicalIds as $canonicalId) {
                 $mergedIdByCanonicalId[$canonicalId] = $mergedId;
                 foreach ($canonicalStates[$canonicalId]->items as $item) {
@@ -186,6 +188,7 @@ final class CanonicalLr1ThenMergeBuilder
 
             ksort($items, SORT_STRING);
             $itemsByMergedId[$mergedId] = array_values($items);
+            $canonicalStateIdsByMergedId[$mergedId] = $canonicalIds;
             $mergedId++;
         }
 
@@ -208,6 +211,6 @@ final class CanonicalLr1ThenMergeBuilder
             $states[] = new LrItemSet($id, $items, $transitionsByMergedId[$id]);
         }
 
-        return new ItemSetCollection($states, count($canonicalStates));
+        return new ItemSetCollection($states, count($canonicalStates), $canonicalStateIdsByMergedId);
     }
 }

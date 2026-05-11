@@ -90,6 +90,8 @@ final class MarkdownReport
             $lines[] = '- Existing action: `' . $automaton->formatAction($grammar, $conflict->existingAction) . '`';
             $lines[] = '- Incoming action: `' . $automaton->formatAction($grammar, $conflict->incomingAction) . '`';
             $lines[] = '- Resolution: ' . ($conflict->resolution ?? 'none');
+            $lines[] = '- Witness tokens: `' . implode(' ', (new WitnessGenerator())->tokenSequenceForState($grammar, $collection, $conflict->stateId, $conflict->tokenId)) . '`';
+            $lines[] = '- Merged canonical states: `' . implode(', ', $collection->canonicalStateIdsFor($conflict->stateId)) . '`';
             $lines[] = '';
         }
 

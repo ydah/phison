@@ -1,4 +1,5 @@
 State 0
+Merged canonical states: 0
 
   $accept -> . expr EOF [EOF]
   expr -> . expr PLUS expr [EOF]
@@ -46,6 +47,7 @@ Gotos:
   expr  1
 
 State 1
+Merged canonical states: 1
 
   $accept -> expr . EOF [EOF]
   expr -> expr . PLUS expr [EOF]
@@ -79,6 +81,7 @@ Actions:
 Gotos:
 
 State 2
+Merged canonical states: 2, 12
 
   expr -> NUMBER . [EOF]
   expr -> NUMBER . [PLUS]
@@ -98,6 +101,7 @@ Actions:
 Gotos:
 
 State 3
+Merged canonical states: 3, 13
 
   expr -> . expr PLUS expr [EOF]
   expr -> . expr PLUS expr [PLUS]
@@ -157,6 +161,7 @@ Gotos:
   expr  10
 
 State 4
+Merged canonical states: 4, 14
 
   expr -> . expr PLUS expr [PLUS]
   expr -> . expr PLUS expr [MINUS]
@@ -209,6 +214,7 @@ Gotos:
   expr  11
 
 State 5
+Merged canonical states: 5
 
   $accept -> expr EOF . [EOF]
 
@@ -218,6 +224,7 @@ Actions:
 Gotos:
 
 State 6
+Merged canonical states: 6, 19
 
   expr -> . expr PLUS expr [EOF]
   expr -> . expr PLUS expr [PLUS]
@@ -277,6 +284,7 @@ Gotos:
   expr  12
 
 State 7
+Merged canonical states: 7, 20
 
   expr -> . expr PLUS expr [EOF]
   expr -> . expr PLUS expr [PLUS]
@@ -336,6 +344,7 @@ Gotos:
   expr  13
 
 State 8
+Merged canonical states: 8, 21
 
   expr -> . expr PLUS expr [EOF]
   expr -> . expr PLUS expr [PLUS]
@@ -395,6 +404,7 @@ Gotos:
   expr  14
 
 State 9
+Merged canonical states: 9, 22
 
   expr -> . expr PLUS expr [EOF]
   expr -> . expr PLUS expr [PLUS]
@@ -454,6 +464,7 @@ Gotos:
   expr  15
 
 State 10
+Merged canonical states: 10, 24
 
   expr -> expr . PLUS expr [EOF]
   expr -> expr . PLUS expr [PLUS]
@@ -497,6 +508,7 @@ Actions:
 Gotos:
 
 State 11
+Merged canonical states: 11, 25
 
   expr -> expr . PLUS expr [PLUS]
   expr -> expr . PLUS expr [MINUS]
@@ -535,6 +547,7 @@ Actions:
 Gotos:
 
 State 12
+Merged canonical states: 15, 26
 
   expr -> expr . PLUS expr [EOF]
   expr -> expr . PLUS expr [PLUS]
@@ -578,6 +591,7 @@ Actions:
 Gotos:
 
 State 13
+Merged canonical states: 16, 27
 
   expr -> expr . PLUS expr [EOF]
   expr -> expr . PLUS expr [PLUS]
@@ -621,6 +635,7 @@ Actions:
 Gotos:
 
 State 14
+Merged canonical states: 17, 28
 
   expr -> expr . PLUS expr [EOF]
   expr -> expr . PLUS expr [PLUS]
@@ -664,6 +679,7 @@ Actions:
 Gotos:
 
 State 15
+Merged canonical states: 18, 29
 
   expr -> expr . PLUS expr [EOF]
   expr -> expr . PLUS expr [PLUS]
@@ -707,6 +723,7 @@ Actions:
 Gotos:
 
 State 16
+Merged canonical states: 23, 30
 
   expr -> LPAREN expr RPAREN . [EOF]
   expr -> LPAREN expr RPAREN . [PLUS]

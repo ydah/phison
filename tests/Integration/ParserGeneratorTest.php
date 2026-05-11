@@ -360,6 +360,14 @@ Y);
         $this->assertMatchesGolden('arithmetic-report.golden.md', $report);
     }
 
+    public function testConflictReportIncludesWitnessAndMergeProvenance(): void
+    {
+        $report = (new \Phison\Report\MarkdownReport())->render(self::$grammar, self::$collection, self::$table);
+
+        self::assertStringContainsString('Witness tokens: `NUMBER PLUS NUMBER PLUS`', $report);
+        self::assertStringContainsString('Merged canonical states:', $report);
+    }
+
     public function testAutomatonDumpMatchesGoldenFile(): void
     {
         $report = (new \Phison\Report\AutomatonReport())->render(self::$grammar, self::$collection, self::$table);

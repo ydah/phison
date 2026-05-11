@@ -53,6 +53,8 @@
 - Existing action: `shift 6`
 - Incoming action: `reduce expr -> MINUS value=expr`
 - Resolution: PLUS has lower precedence than UMINUS
+- Witness tokens: `MINUS NUMBER PLUS`
+- Merged canonical states: `10, 24`
 
 ### Conflict 2
 
@@ -63,6 +65,8 @@
 - Existing action: `shift 7`
 - Incoming action: `reduce expr -> MINUS value=expr`
 - Resolution: MINUS has lower precedence than UMINUS
+- Witness tokens: `MINUS NUMBER MINUS`
+- Merged canonical states: `10, 24`
 
 ### Conflict 3
 
@@ -73,6 +77,8 @@
 - Existing action: `shift 8`
 - Incoming action: `reduce expr -> MINUS value=expr`
 - Resolution: STAR has lower precedence than UMINUS
+- Witness tokens: `MINUS NUMBER STAR`
+- Merged canonical states: `10, 24`
 
 ### Conflict 4
 
@@ -83,6 +89,8 @@
 - Existing action: `shift 9`
 - Incoming action: `reduce expr -> MINUS value=expr`
 - Resolution: SLASH has lower precedence than UMINUS
+- Witness tokens: `MINUS NUMBER SLASH`
+- Merged canonical states: `10, 24`
 
 ### Conflict 5
 
@@ -93,6 +101,8 @@
 - Existing action: `shift 6`
 - Incoming action: `reduce expr -> left=expr PLUS right=expr`
 - Resolution: left associativity chooses reduce
+- Witness tokens: `NUMBER PLUS NUMBER PLUS`
+- Merged canonical states: `15, 26`
 
 ### Conflict 6
 
@@ -103,6 +113,8 @@
 - Existing action: `reduce expr -> left=expr PLUS right=expr`
 - Incoming action: `shift 7`
 - Resolution: left associativity chooses reduce
+- Witness tokens: `NUMBER PLUS NUMBER MINUS`
+- Merged canonical states: `15, 26`
 
 ### Conflict 7
 
@@ -113,6 +125,8 @@
 - Existing action: `reduce expr -> left=expr PLUS right=expr`
 - Incoming action: `shift 8`
 - Resolution: STAR has higher precedence than PLUS
+- Witness tokens: `NUMBER PLUS NUMBER STAR`
+- Merged canonical states: `15, 26`
 
 ### Conflict 8
 
@@ -123,6 +137,8 @@
 - Existing action: `reduce expr -> left=expr PLUS right=expr`
 - Incoming action: `shift 9`
 - Resolution: SLASH has higher precedence than PLUS
+- Witness tokens: `NUMBER PLUS NUMBER SLASH`
+- Merged canonical states: `15, 26`
 
 ### Conflict 9
 
@@ -133,6 +149,8 @@
 - Existing action: `shift 6`
 - Incoming action: `reduce expr -> left=expr MINUS right=expr`
 - Resolution: left associativity chooses reduce
+- Witness tokens: `NUMBER MINUS NUMBER PLUS`
+- Merged canonical states: `16, 27`
 
 ### Conflict 10
 
@@ -143,6 +161,8 @@
 - Existing action: `shift 7`
 - Incoming action: `reduce expr -> left=expr MINUS right=expr`
 - Resolution: left associativity chooses reduce
+- Witness tokens: `NUMBER MINUS NUMBER MINUS`
+- Merged canonical states: `16, 27`
 
 ### Conflict 11
 
@@ -153,6 +173,8 @@
 - Existing action: `reduce expr -> left=expr MINUS right=expr`
 - Incoming action: `shift 8`
 - Resolution: STAR has higher precedence than MINUS
+- Witness tokens: `NUMBER MINUS NUMBER STAR`
+- Merged canonical states: `16, 27`
 
 ### Conflict 12
 
@@ -163,6 +185,8 @@
 - Existing action: `reduce expr -> left=expr MINUS right=expr`
 - Incoming action: `shift 9`
 - Resolution: SLASH has higher precedence than MINUS
+- Witness tokens: `NUMBER MINUS NUMBER SLASH`
+- Merged canonical states: `16, 27`
 
 ### Conflict 13
 
@@ -173,6 +197,8 @@
 - Existing action: `shift 6`
 - Incoming action: `reduce expr -> left=expr STAR right=expr`
 - Resolution: PLUS has lower precedence than STAR
+- Witness tokens: `NUMBER STAR NUMBER PLUS`
+- Merged canonical states: `17, 28`
 
 ### Conflict 14
 
@@ -183,6 +209,8 @@
 - Existing action: `shift 7`
 - Incoming action: `reduce expr -> left=expr STAR right=expr`
 - Resolution: MINUS has lower precedence than STAR
+- Witness tokens: `NUMBER STAR NUMBER MINUS`
+- Merged canonical states: `17, 28`
 
 ### Conflict 15
 
@@ -193,6 +221,8 @@
 - Existing action: `shift 8`
 - Incoming action: `reduce expr -> left=expr STAR right=expr`
 - Resolution: left associativity chooses reduce
+- Witness tokens: `NUMBER STAR NUMBER STAR`
+- Merged canonical states: `17, 28`
 
 ### Conflict 16
 
@@ -203,6 +233,8 @@
 - Existing action: `reduce expr -> left=expr STAR right=expr`
 - Incoming action: `shift 9`
 - Resolution: left associativity chooses reduce
+- Witness tokens: `NUMBER STAR NUMBER SLASH`
+- Merged canonical states: `17, 28`
 
 ### Conflict 17
 
@@ -213,6 +245,8 @@
 - Existing action: `shift 6`
 - Incoming action: `reduce expr -> left=expr SLASH right=expr`
 - Resolution: PLUS has lower precedence than SLASH
+- Witness tokens: `NUMBER SLASH NUMBER PLUS`
+- Merged canonical states: `18, 29`
 
 ### Conflict 18
 
@@ -223,6 +257,8 @@
 - Existing action: `shift 7`
 - Incoming action: `reduce expr -> left=expr SLASH right=expr`
 - Resolution: MINUS has lower precedence than SLASH
+- Witness tokens: `NUMBER SLASH NUMBER MINUS`
+- Merged canonical states: `18, 29`
 
 ### Conflict 19
 
@@ -233,6 +269,8 @@
 - Existing action: `shift 8`
 - Incoming action: `reduce expr -> left=expr SLASH right=expr`
 - Resolution: left associativity chooses reduce
+- Witness tokens: `NUMBER SLASH NUMBER STAR`
+- Merged canonical states: `18, 29`
 
 ### Conflict 20
 
@@ -243,6 +281,8 @@
 - Existing action: `shift 9`
 - Incoming action: `reduce expr -> left=expr SLASH right=expr`
 - Resolution: left associativity chooses reduce
+- Witness tokens: `NUMBER SLASH NUMBER SLASH`
+- Merged canonical states: `18, 29`
 
 ## Conflict States
 
@@ -250,6 +290,7 @@
 
 ```text
 State 10
+Merged canonical states: 10, 24
 
   expr -> expr . PLUS expr [EOF]
   expr -> expr . PLUS expr [PLUS]
@@ -297,6 +338,7 @@ Gotos:
 
 ```text
 State 12
+Merged canonical states: 15, 26
 
   expr -> expr . PLUS expr [EOF]
   expr -> expr . PLUS expr [PLUS]
@@ -344,6 +386,7 @@ Gotos:
 
 ```text
 State 13
+Merged canonical states: 16, 27
 
   expr -> expr . PLUS expr [EOF]
   expr -> expr . PLUS expr [PLUS]
@@ -391,6 +434,7 @@ Gotos:
 
 ```text
 State 14
+Merged canonical states: 17, 28
 
   expr -> expr . PLUS expr [EOF]
   expr -> expr . PLUS expr [PLUS]
@@ -438,6 +482,7 @@ Gotos:
 
 ```text
 State 15
+Merged canonical states: 18, 29
 
   expr -> expr . PLUS expr [EOF]
   expr -> expr . PLUS expr [PLUS]

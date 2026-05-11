@@ -25,7 +25,13 @@ final class AutomatonReport
     public function renderState(Grammar $grammar, ItemSetCollection $collection, ParseTable $table, int $stateId): string
     {
         $state = $collection->state($stateId);
-        $lines = ['State ' . $state->id, ''];
+        $canonicalIds = $collection->canonicalStateIdsFor($stateId);
+        $lines = ['State ' . $state->id];
+        if ($canonicalIds !== [$stateId] || $collection->canonicalStateCount !== count($collection->states)) {
+            $lines[] = 'Merged canonical states: ' . implode(', ', $canonicalIds);
+        }
+
+        $lines[] = '';
         foreach ($state->items as $item) {
             $lines[] = '  ' . $this->formatItem($grammar, $item);
         }
