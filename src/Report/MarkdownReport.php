@@ -62,14 +62,48 @@ final class MarkdownReport
         if ($table->conflicts === []) {
             $lines[] = '_None._';
         } else {
-            foreach ($table->conflicts as $conflict) {
-                $token = $grammar->terminalById($conflict->tokenId)->name;
-                $status = $conflict->resolved ? 'resolved' : 'unresolved';
-                $lines[] = '- state `' . $conflict->stateId . '`, token `' . $token . '`, '
-                    . $conflict->kind . ', ' . $status . ': ' . ($conflict->resolution ?? '');
-            }
+            array_push($lines, ...$this->renderConflicts($grammar, $collection, $table));
         }
 
         return implode("\n", $lines) . "\n";
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function renderConflicts(Grammar $grammar, ItemSetCollection $collection, ParseTable $table): array
+    {
+        $lines = [];
+        $automaton = new AutomatonReport();
+        $stateIds = [];
+
+        foreach ($table->conflicts as $index => $conflict) {
+            $stateIds[$conflict->stateId] = true;
+            $token = $grammar->terminalById($conflict->tokenId)->name;
+            $status = $conflict->resolved ? 'resolved' : 'unresolved';
+            $lines[] = '### Conflict ' . ($index + 1);
+            $lines[] = '';
+            $lines[] = '- State: `' . $conflict->stateId . '`';
+            $lines[] = '- Token: `' . $token . '`';
+            $lines[] = '- Kind: `' . $conflict->kind . '`';
+            $lines[] = '- Status: `' . $status . '`';
+            $lines[] = '- Existing action: `' . $automaton->formatAction($grammar, $conflict->existingAction) . '`';
+            $lines[] = '- Incoming action: `' . $automaton->formatAction($grammar, $conflict->incomingAction) . '`';
+            $lines[] = '- Resolution: ' . ($conflict->resolution ?? 'none');
+            $lines[] = '';
+        }
+
+        $lines[] = '## Conflict States';
+        $lines[] = '';
+        foreach (array_keys($stateIds) as $stateId) {
+            $lines[] = '### State ' . $stateId;
+            $lines[] = '';
+            $lines[] = '```text';
+            $lines[] = rtrim($automaton->renderState($grammar, $collection, $table, (int) $stateId));
+            $lines[] = '```';
+            $lines[] = '';
+        }
+
+        return $lines;
     }
 }

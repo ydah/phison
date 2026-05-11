@@ -12,6 +12,16 @@ use Phison\Lalr\ParseTable;
 
 final class AutomatonReport
 {
+    public function render(Grammar $grammar, ItemSetCollection $collection, ParseTable $table): string
+    {
+        $chunks = [];
+        foreach ($collection->states as $state) {
+            $chunks[] = rtrim($this->renderState($grammar, $collection, $table, $state->id));
+        }
+
+        return implode("\n\n", $chunks) . "\n";
+    }
+
     public function renderState(Grammar $grammar, ItemSetCollection $collection, ParseTable $table, int $stateId): string
     {
         $state = $collection->state($stateId);
@@ -54,7 +64,7 @@ final class AutomatonReport
             . ' [' . $grammar->terminalById($item->lookaheadTerminalId)->name . ']';
     }
 
-    private function formatAction(Grammar $grammar, int $action): string
+    public function formatAction(Grammar $grammar, int $action): string
     {
         if ($action > 0) {
             return 'shift ' . (string) ($action - 1);

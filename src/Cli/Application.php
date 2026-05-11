@@ -75,6 +75,10 @@ final class Application
             $this->lintGeneratedFile($output);
         }
 
+        if (isset($options['dump-automaton'])) {
+            $this->writeAutomatonDump($grammar, $collection, $table, $options['dump-automaton']);
+        }
+
         if (isset($options['report'])) {
             $report = (new MarkdownReport())->render($grammar, $collection, $table);
             $reportDirectory = dirname($options['report']);
@@ -142,11 +146,12 @@ final class Application
     {
         fwrite(STDOUT, <<<'TEXT'
 Usage:
-  phison generate <grammar.y> --output <Parser.php> [--namespace Ns] [--class Parser] [--report report.md]
+  phison generate <grammar.y> --output <Parser.php> [--namespace Ns] [--class Parser] [--report report.md] [--dump-automaton dump.txt]
   phison validate <grammar.y>
   phison inspect <grammar.y> [--state N]
 
 Options:
+  --table-layout=array|switch|packed|hybrid
   --target-php=8.2|8.3|8.4|8.5
   --expect-conflicts=N
   --fail-on-conflict=false
@@ -263,6 +268,27 @@ TEXT);
         exec($command, $output, $exitCode);
         if ($exitCode !== 0) {
             throw new \RuntimeException("Generated parser failed php -l:\n" . implode("\n", $output));
+        }
+    }
+
+    /**
+     * @param string|bool $target
+     */
+    private function writeAutomatonDump(Grammar $grammar, ItemSetCollection $collection, ParseTable $table, $target): void
+    {
+        $dump = (new AutomatonReport())->render($grammar, $collection, $table);
+        if ($target === true) {
+            fwrite(STDOUT, $dump);
+            return;
+        }
+
+        $directory = dirname($target);
+        if ($directory !== '' && $directory !== '.' && !is_dir($directory) && !mkdir($directory, 0777, true) && !is_dir($directory)) {
+            throw new \RuntimeException('Unable to create automaton dump directory: ' . $directory);
+        }
+
+        if (file_put_contents($target, $dump) === false) {
+            throw new \RuntimeException('Unable to write automaton dump: ' . $target);
         }
     }
 }
