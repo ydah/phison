@@ -46,11 +46,11 @@ final class ParserEmitter
         $lines[] = $this->constArray('TOKEN_DISPLAY', array_map(static fn ($terminal): string => $terminal->displayName ?? $terminal->name, $grammar->terminalsById));
         $lines[] = $this->constArray('PRODUCTION_LENGTH', array_map(static fn (Production $production): int => $production->length(), $grammar->productions));
         $lines[] = $this->constArray('PRODUCTION_LHS', array_map(static fn (Production $production): int => $production->lhs->id, $grammar->productions));
-        $lines[] = $this->constArray('ACTION', $table->actions);
-        $lines[] = $this->constArray('GOTO', $table->gotos);
         $lines[] = $this->constArray('EXPECTED', $table->expected);
         $lines[] = '';
         $lines[] = $this->parseMethod();
+        $lines[] = '';
+        array_push($lines, ...(new TableEmitter())->emit($table->actions, $table->gotos, $options->tableLayout));
         $lines[] = '';
         $lines[] = $this->expectedNamesMethod();
         $lines[] = '';
@@ -86,7 +86,7 @@ final class ParserEmitter
         while (true) {
             $state = $stateStack[array_key_last($stateStack)];
             $tokenId = $lookahead->id();
-            $action = self::ACTION[$state][$tokenId] ?? null;
+            $action = $this->action($state, $tokenId);
 
             if ($action === null) {
                 throw new ParseError(
@@ -126,7 +126,7 @@ final class ParserEmitter
                 $value = $this->reduce($rule, $rhsValues, $rhsTokens, $rhsLocations, $context);
                 $currentState = $stateStack[array_key_last($stateStack)];
                 $lhs = self::PRODUCTION_LHS[$rule];
-                $goto = self::GOTO[$currentState][$lhs] ?? null;
+                $goto = $this->gotoState($currentState, $lhs);
                 if ($goto === null) {
                     throw new \LogicException('Missing goto for state ' . $currentState . ' and lhs ' . $lhs . '.');
                 }

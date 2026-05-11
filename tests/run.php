@@ -50,6 +50,25 @@ foreach ($cases as $input => $expected) {
     }
 }
 
+foreach (['array', 'switch', 'packed', 'hybrid'] as $layout) {
+    $className = 'Arithmetic' . ucfirst($layout) . 'Parser';
+    $namespace = 'Example\\Arithmetic\\Generated' . ucfirst($layout);
+    $layoutOutput = sys_get_temp_dir() . '/' . $className . '.php';
+    $layoutCode = (new ParserEmitter())->emit(
+        $grammar,
+        $table,
+        new CodegenOptions($namespace, $className, '8.2', $layout),
+    )->contents;
+    file_put_contents($layoutOutput, $layoutCode);
+    require $layoutOutput;
+
+    $parserClass = $namespace . '\\' . $className;
+    $actual = (new $parserClass())->parse((new ArithmeticLexer('1 + 2 * (3 + 4)'))->tokens());
+    if ($actual !== 15) {
+        throw new RuntimeException('Expected ' . $layout . ' layout parser to return 15, got ' . (string) $actual);
+    }
+}
+
 $ambiguousArithmetic = <<<'LRG'
 grammar AmbiguousArithmetic
 start expr
