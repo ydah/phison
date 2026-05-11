@@ -20,6 +20,9 @@
     "bin/phison"
   ],
   "scripts": {
-    "test": "php tests/run.php"
+    "lint": "find bin src examples tests -type f \\( -name '*.php' -o -name phison \\) -print0 | xargs -0 -n1 php -l",
+    "test": "php tests/run.php",
+    "validate:example": "php bin/phison validate examples/arithmetic/arithmetic.y",
+    "generate:example": "php bin/phison generate examples/arithmetic/arithmetic.y --output examples/arithmetic/Generated/ArithmeticParser.php --report examples/arithmetic/report.md --lint"
   }
 }
