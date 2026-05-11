@@ -25,11 +25,12 @@
     "bin/phison"
   ],
   "scripts": {
-    "lint": "find bin src examples tests -type f \\( -name '*.php' -o -name phison \\) -print0 | xargs -0 -n1 php -l",
+    "lint": "find bin src examples tests benchmarks -type f \\( -name '*.php' -o -name phison \\) -print0 | xargs -0 -n1 php -l",
     "test": "phpunit",
     "phpstan": "phpstan analyse",
     "cs-check": "php-cs-fixer fix --dry-run --diff",
     "cs-fix": "php-cs-fixer fix",
+    "benchmark": "php benchmarks/arithmetic.php",
     "validate:example": "php bin/phison validate examples/arithmetic/arithmetic.y",
     "generate:example": "php bin/phison generate examples/arithmetic/arithmetic.y --output examples/arithmetic/Generated/ArithmeticParser.php --report examples/arithmetic/report.md --lint",
     "run:example": "php examples/arithmetic/run.php \"1 + 2 * (3 + 4)\""

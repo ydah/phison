@@ -9,16 +9,17 @@ final class TableEmitter
     /**
      * @param array<int, array<int, int>> $actions
      * @param array<int, array<int, int>> $gotos
+     * @param list<int> $terminalIds
      * @return list<string>
      */
-    public function emit(array $actions, array $gotos, string $layout, PhpTargetProfile $profile): array
+    public function emit(array $actions, array $gotos, string $layout, PhpTargetProfile $profile, array $terminalIds): array
     {
         $layout = $this->resolveLayout($actions, $layout);
 
         return match ($layout) {
             TableLayout::ARRAY => $this->emitArrayTables($actions, $gotos, $profile),
             TableLayout::SWITCH => $this->emitSwitchTables($actions, $gotos),
-            TableLayout::PACKED => $this->emitPackedTables($actions, $gotos, $profile),
+            TableLayout::PACKED => $this->emitPackedTables($actions, $gotos, $profile, $terminalIds),
             default => throw new \InvalidArgumentException('Unsupported table layout: ' . $layout),
         };
     }
@@ -97,14 +98,18 @@ PHP,
     /**
      * @param array<int, array<int, int>> $actions
      * @param array<int, array<int, int>> $gotos
+     * @param list<int> $terminalIds
      * @return list<string>
      */
-    private function emitPackedTables(array $actions, array $gotos, PhpTargetProfile $profile): array
+    private function emitPackedTables(array $actions, array $gotos, PhpTargetProfile $profile, array $terminalIds): array
     {
+        $actionDefaults = $this->defaultReductions($actions, $terminalIds);
+        $actions = $this->withoutDefaultedRows($actions, $actionDefaults);
         $action = $this->pack($actions);
         $goto = $this->pack($gotos);
 
         return [
+            $this->constArray($profile, 'ACTION_DEFAULT', $actionDefaults),
             $this->constArray($profile, 'ACTION_BASE', $action['base']),
             $this->constArray($profile, 'ACTION_CHECK', $action['check']),
             $this->constArray($profile, 'ACTION_VALUE', $action['value']),
@@ -115,6 +120,11 @@ PHP,
             <<<'PHP'
     private function action(int $state, int $token): ?int
     {
+        $default = self::ACTION_DEFAULT[$state] ?? null;
+        if ($default !== null) {
+            return $default;
+        }
+
         $index = (self::ACTION_BASE[$state] ?? 0) + $token;
         if ((self::ACTION_CHECK[$index] ?? null) !== $state) {
             return null;
@@ -148,7 +158,9 @@ PHP,
         $check = [];
         $value = [];
 
-        foreach ($rows as $state => $row) {
+        foreach ($this->packingOrder($rows) as $state) {
+            $row = $rows[$state];
+            ksort($row, SORT_NUMERIC);
             $base[$state] = $this->findBase($row, $check);
             foreach ($row as $symbol => $entry) {
                 $index = $base[$state] + $symbol;
@@ -166,6 +178,94 @@ PHP,
             'check' => $check,
             'value' => $value,
         ];
+    }
+
+    /**
+     * @param array<int, array<int, int>> $actions
+     * @param list<int> $terminalIds
+     * @return array<int, int>
+     */
+    private function defaultReductions(array $actions, array $terminalIds): array
+    {
+        $defaults = [];
+        foreach ($actions as $state => $row) {
+            if ($row === []) {
+                continue;
+            }
+
+            $first = null;
+            foreach ($terminalIds as $terminalId) {
+                $action = $row[$terminalId] ?? null;
+                if ($action === null || $action >= 0) {
+                    continue 2;
+                }
+
+                $first ??= $action;
+                if ($action !== $first) {
+                    continue 2;
+                }
+            }
+
+            if ($first !== null) {
+                $defaults[$state] = $first;
+            }
+        }
+
+        ksort($defaults, SORT_NUMERIC);
+
+        return $defaults;
+    }
+
+    /**
+     * @param array<int, array<int, int>> $actions
+     * @param array<int, int> $defaults
+     * @return array<int, array<int, int>>
+     */
+    private function withoutDefaultedRows(array $actions, array $defaults): array
+    {
+        foreach (array_keys($defaults) as $state) {
+            unset($actions[$state]);
+        }
+
+        return $actions;
+    }
+
+    /**
+     * @param array<int, array<int, int>> $rows
+     * @return list<int>
+     */
+    private function packingOrder(array $rows): array
+    {
+        $states = array_keys($rows);
+        usort($states, function (int $left, int $right) use ($rows): int {
+            $byEntryCount = count($rows[$right]) <=> count($rows[$left]);
+            if ($byEntryCount !== 0) {
+                return $byEntryCount;
+            }
+
+            $bySpan = $this->rowSpan($rows[$right]) <=> $this->rowSpan($rows[$left]);
+            if ($bySpan !== 0) {
+                return $bySpan;
+            }
+
+            return $left <=> $right;
+        });
+
+        return $states;
+    }
+
+    /**
+     * @param array<int, int> $row
+     */
+    private function rowSpan(array $row): int
+    {
+        if ($row === []) {
+            return 0;
+        }
+
+        $symbols = array_keys($row);
+
+        return (int) max($symbols) - (int) min($symbols) + 1;
     }
 
     /**

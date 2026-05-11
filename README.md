@@ -49,6 +49,16 @@ bin/phison generate examples/arithmetic/arithmetic.y \
 - `--dump-automaton` prints or writes the LALR automaton.
 - `--lint` runs `php -l` on the generated parser.
 
+## Benchmark
+
+```bash
+composer benchmark
+php benchmarks/arithmetic.php 50000 packed
+```
+
+The arithmetic benchmark regenerates the example parser in a temporary file
+and reports elapsed time plus parses per second for the selected table layout.
+
 ## DSL sketch
 
 ```text

@@ -16,6 +16,9 @@ use Phison\Lalr\ItemSetCollection;
 use Phison\Lalr\ParseTable;
 use Phison\Lalr\ParseTableBuilder;
 use Phison\Runtime\ParseError;
+use Phison\Runtime\SourceRange;
+use Phison\Runtime\TokenInterface;
+use Phison\Runtime\TokenStreamInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -90,6 +93,92 @@ final class ParserGeneratorTest extends TestCase
         $parser = new $parserClass();
 
         self::assertSame(15, $parser->parse((new ArithmeticLexer('1 + 2 * (3 + 4)'))->tokens()));
+    }
+
+    public function testPackedLayoutUsesDefaultReductionsWhenSafe(): void
+    {
+        $document = (new DslParser())->parse(<<<'LRG'
+grammar EmptyOnly
+start s
+
+rule s {
+    => php {
+        return 'empty';
+    }
+}
+LRG);
+        $grammar = (new GrammarNormalizer())->normalize($document);
+        $collection = (new CanonicalLr1ThenMergeBuilder())->build($grammar);
+        $table = (new ParseTableBuilder())->build($grammar, $collection);
+        $namespace = 'Phison\\Tests\\GeneratedDefaultReduction';
+        $className = 'DefaultReductionParser';
+        $output = sys_get_temp_dir() . '/' . $className . '.php';
+        $code = (new ParserEmitter())->emit(
+            $grammar,
+            $table,
+            new CodegenOptions($namespace, $className, '8.2', 'packed'),
+        )->contents;
+
+        self::assertStringContainsString('private const ACTION_DEFAULT = array (', $code);
+        self::assertStringContainsString('0 => -2', $code);
+
+        file_put_contents($output, $code);
+        require_once $output;
+
+        $parserClass = $namespace . '\\' . $className;
+        $eof = new class ($parserClass::T_EOF) implements TokenInterface {
+            public function __construct(
+                private readonly int $id,
+            ) {
+            }
+
+            public function id(): int
+            {
+                return $this->id;
+            }
+
+            public function name(): string
+            {
+                return 'EOF';
+            }
+
+            public function value(): mixed
+            {
+                return null;
+            }
+
+            public function location(): SourceRange
+            {
+                return SourceRange::unknown();
+            }
+        };
+        $stream = new class ($eof) implements TokenStreamInterface {
+            public function __construct(
+                private readonly TokenInterface $eof,
+            ) {
+            }
+
+            public function current(): TokenInterface
+            {
+                return $this->eof;
+            }
+
+            public function advance(): void
+            {
+            }
+
+            public function previousTokens(int $count): array
+            {
+                return [];
+            }
+
+            public function nextTokens(int $count): array
+            {
+                return [];
+            }
+        };
+
+        self::assertSame('empty', (new $parserClass())->parse($stream));
     }
 
     /**

@@ -7,6 +7,7 @@ $finder = PhpCsFixer\Finder::create()
         __DIR__ . '/src',
         __DIR__ . '/tests',
         __DIR__ . '/examples',
+        __DIR__ . '/benchmarks',
     ])
     ->exclude([
         'arithmetic/Generated',
