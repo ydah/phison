@@ -10,6 +10,7 @@ $finder = PhpCsFixer\Finder::create()
     ])
     ->exclude([
         'arithmetic/Generated',
+        'Fixtures/expected',
     ])
     ->append([
         __DIR__ . '/bin/phison',

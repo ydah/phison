@@ -1,0 +1,726 @@
+State 0
+
+  $accept -> . expr EOF [EOF]
+  expr -> . expr PLUS expr [EOF]
+  expr -> . expr PLUS expr [PLUS]
+  expr -> . expr PLUS expr [MINUS]
+  expr -> . expr PLUS expr [STAR]
+  expr -> . expr PLUS expr [SLASH]
+  expr -> . expr MINUS expr [EOF]
+  expr -> . expr MINUS expr [PLUS]
+  expr -> . expr MINUS expr [MINUS]
+  expr -> . expr MINUS expr [STAR]
+  expr -> . expr MINUS expr [SLASH]
+  expr -> . expr STAR expr [EOF]
+  expr -> . expr STAR expr [PLUS]
+  expr -> . expr STAR expr [MINUS]
+  expr -> . expr STAR expr [STAR]
+  expr -> . expr STAR expr [SLASH]
+  expr -> . expr SLASH expr [EOF]
+  expr -> . expr SLASH expr [PLUS]
+  expr -> . expr SLASH expr [MINUS]
+  expr -> . expr SLASH expr [STAR]
+  expr -> . expr SLASH expr [SLASH]
+  expr -> . MINUS expr [EOF]
+  expr -> . MINUS expr [PLUS]
+  expr -> . MINUS expr [MINUS]
+  expr -> . MINUS expr [STAR]
+  expr -> . MINUS expr [SLASH]
+  expr -> . LPAREN expr RPAREN [EOF]
+  expr -> . LPAREN expr RPAREN [PLUS]
+  expr -> . LPAREN expr RPAREN [MINUS]
+  expr -> . LPAREN expr RPAREN [STAR]
+  expr -> . LPAREN expr RPAREN [SLASH]
+  expr -> . NUMBER [EOF]
+  expr -> . NUMBER [PLUS]
+  expr -> . NUMBER [MINUS]
+  expr -> . NUMBER [STAR]
+  expr -> . NUMBER [SLASH]
+
+Actions:
+  NUMBER  shift 2
+  MINUS  shift 3
+  LPAREN  shift 4
+
+Gotos:
+  expr  1
+
+State 1
+
+  $accept -> expr . EOF [EOF]
+  expr -> expr . PLUS expr [EOF]
+  expr -> expr . PLUS expr [PLUS]
+  expr -> expr . PLUS expr [MINUS]
+  expr -> expr . PLUS expr [STAR]
+  expr -> expr . PLUS expr [SLASH]
+  expr -> expr . MINUS expr [EOF]
+  expr -> expr . MINUS expr [PLUS]
+  expr -> expr . MINUS expr [MINUS]
+  expr -> expr . MINUS expr [STAR]
+  expr -> expr . MINUS expr [SLASH]
+  expr -> expr . STAR expr [EOF]
+  expr -> expr . STAR expr [PLUS]
+  expr -> expr . STAR expr [MINUS]
+  expr -> expr . STAR expr [STAR]
+  expr -> expr . STAR expr [SLASH]
+  expr -> expr . SLASH expr [EOF]
+  expr -> expr . SLASH expr [PLUS]
+  expr -> expr . SLASH expr [MINUS]
+  expr -> expr . SLASH expr [STAR]
+  expr -> expr . SLASH expr [SLASH]
+
+Actions:
+  EOF  shift 5
+  PLUS  shift 6
+  MINUS  shift 7
+  STAR  shift 8
+  SLASH  shift 9
+
+Gotos:
+
+State 2
+
+  expr -> NUMBER . [EOF]
+  expr -> NUMBER . [PLUS]
+  expr -> NUMBER . [MINUS]
+  expr -> NUMBER . [STAR]
+  expr -> NUMBER . [SLASH]
+  expr -> NUMBER . [RPAREN]
+
+Actions:
+  EOF  reduce expr -> n=NUMBER
+  PLUS  reduce expr -> n=NUMBER
+  MINUS  reduce expr -> n=NUMBER
+  STAR  reduce expr -> n=NUMBER
+  SLASH  reduce expr -> n=NUMBER
+  RPAREN  reduce expr -> n=NUMBER
+
+Gotos:
+
+State 3
+
+  expr -> . expr PLUS expr [EOF]
+  expr -> . expr PLUS expr [PLUS]
+  expr -> . expr PLUS expr [MINUS]
+  expr -> . expr PLUS expr [STAR]
+  expr -> . expr PLUS expr [SLASH]
+  expr -> . expr PLUS expr [RPAREN]
+  expr -> . expr MINUS expr [EOF]
+  expr -> . expr MINUS expr [PLUS]
+  expr -> . expr MINUS expr [MINUS]
+  expr -> . expr MINUS expr [STAR]
+  expr -> . expr MINUS expr [SLASH]
+  expr -> . expr MINUS expr [RPAREN]
+  expr -> . expr STAR expr [EOF]
+  expr -> . expr STAR expr [PLUS]
+  expr -> . expr STAR expr [MINUS]
+  expr -> . expr STAR expr [STAR]
+  expr -> . expr STAR expr [SLASH]
+  expr -> . expr STAR expr [RPAREN]
+  expr -> . expr SLASH expr [EOF]
+  expr -> . expr SLASH expr [PLUS]
+  expr -> . expr SLASH expr [MINUS]
+  expr -> . expr SLASH expr [STAR]
+  expr -> . expr SLASH expr [SLASH]
+  expr -> . expr SLASH expr [RPAREN]
+  expr -> . MINUS expr [EOF]
+  expr -> . MINUS expr [PLUS]
+  expr -> . MINUS expr [MINUS]
+  expr -> . MINUS expr [STAR]
+  expr -> . MINUS expr [SLASH]
+  expr -> . MINUS expr [RPAREN]
+  expr -> MINUS . expr [EOF]
+  expr -> MINUS . expr [PLUS]
+  expr -> MINUS . expr [MINUS]
+  expr -> MINUS . expr [STAR]
+  expr -> MINUS . expr [SLASH]
+  expr -> MINUS . expr [RPAREN]
+  expr -> . LPAREN expr RPAREN [EOF]
+  expr -> . LPAREN expr RPAREN [PLUS]
+  expr -> . LPAREN expr RPAREN [MINUS]
+  expr -> . LPAREN expr RPAREN [STAR]
+  expr -> . LPAREN expr RPAREN [SLASH]
+  expr -> . LPAREN expr RPAREN [RPAREN]
+  expr -> . NUMBER [EOF]
+  expr -> . NUMBER [PLUS]
+  expr -> . NUMBER [MINUS]
+  expr -> . NUMBER [STAR]
+  expr -> . NUMBER [SLASH]
+  expr -> . NUMBER [RPAREN]
+
+Actions:
+  NUMBER  shift 2
+  MINUS  shift 3
+  LPAREN  shift 4
+
+Gotos:
+  expr  10
+
+State 4
+
+  expr -> . expr PLUS expr [PLUS]
+  expr -> . expr PLUS expr [MINUS]
+  expr -> . expr PLUS expr [STAR]
+  expr -> . expr PLUS expr [SLASH]
+  expr -> . expr PLUS expr [RPAREN]
+  expr -> . expr MINUS expr [PLUS]
+  expr -> . expr MINUS expr [MINUS]
+  expr -> . expr MINUS expr [STAR]
+  expr -> . expr MINUS expr [SLASH]
+  expr -> . expr MINUS expr [RPAREN]
+  expr -> . expr STAR expr [PLUS]
+  expr -> . expr STAR expr [MINUS]
+  expr -> . expr STAR expr [STAR]
+  expr -> . expr STAR expr [SLASH]
+  expr -> . expr STAR expr [RPAREN]
+  expr -> . expr SLASH expr [PLUS]
+  expr -> . expr SLASH expr [MINUS]
+  expr -> . expr SLASH expr [STAR]
+  expr -> . expr SLASH expr [SLASH]
+  expr -> . expr SLASH expr [RPAREN]
+  expr -> . MINUS expr [PLUS]
+  expr -> . MINUS expr [MINUS]
+  expr -> . MINUS expr [STAR]
+  expr -> . MINUS expr [SLASH]
+  expr -> . MINUS expr [RPAREN]
+  expr -> . LPAREN expr RPAREN [PLUS]
+  expr -> . LPAREN expr RPAREN [MINUS]
+  expr -> . LPAREN expr RPAREN [STAR]
+  expr -> . LPAREN expr RPAREN [SLASH]
+  expr -> . LPAREN expr RPAREN [RPAREN]
+  expr -> LPAREN . expr RPAREN [EOF]
+  expr -> LPAREN . expr RPAREN [PLUS]
+  expr -> LPAREN . expr RPAREN [MINUS]
+  expr -> LPAREN . expr RPAREN [STAR]
+  expr -> LPAREN . expr RPAREN [SLASH]
+  expr -> LPAREN . expr RPAREN [RPAREN]
+  expr -> . NUMBER [PLUS]
+  expr -> . NUMBER [MINUS]
+  expr -> . NUMBER [STAR]
+  expr -> . NUMBER [SLASH]
+  expr -> . NUMBER [RPAREN]
+
+Actions:
+  NUMBER  shift 2
+  MINUS  shift 3
+  LPAREN  shift 4
+
+Gotos:
+  expr  11
+
+State 5
+
+  $accept -> expr EOF . [EOF]
+
+Actions:
+  EOF  accept
+
+Gotos:
+
+State 6
+
+  expr -> . expr PLUS expr [EOF]
+  expr -> . expr PLUS expr [PLUS]
+  expr -> . expr PLUS expr [MINUS]
+  expr -> . expr PLUS expr [STAR]
+  expr -> . expr PLUS expr [SLASH]
+  expr -> . expr PLUS expr [RPAREN]
+  expr -> expr PLUS . expr [EOF]
+  expr -> expr PLUS . expr [PLUS]
+  expr -> expr PLUS . expr [MINUS]
+  expr -> expr PLUS . expr [STAR]
+  expr -> expr PLUS . expr [SLASH]
+  expr -> expr PLUS . expr [RPAREN]
+  expr -> . expr MINUS expr [EOF]
+  expr -> . expr MINUS expr [PLUS]
+  expr -> . expr MINUS expr [MINUS]
+  expr -> . expr MINUS expr [STAR]
+  expr -> . expr MINUS expr [SLASH]
+  expr -> . expr MINUS expr [RPAREN]
+  expr -> . expr STAR expr [EOF]
+  expr -> . expr STAR expr [PLUS]
+  expr -> . expr STAR expr [MINUS]
+  expr -> . expr STAR expr [STAR]
+  expr -> . expr STAR expr [SLASH]
+  expr -> . expr STAR expr [RPAREN]
+  expr -> . expr SLASH expr [EOF]
+  expr -> . expr SLASH expr [PLUS]
+  expr -> . expr SLASH expr [MINUS]
+  expr -> . expr SLASH expr [STAR]
+  expr -> . expr SLASH expr [SLASH]
+  expr -> . expr SLASH expr [RPAREN]
+  expr -> . MINUS expr [EOF]
+  expr -> . MINUS expr [PLUS]
+  expr -> . MINUS expr [MINUS]
+  expr -> . MINUS expr [STAR]
+  expr -> . MINUS expr [SLASH]
+  expr -> . MINUS expr [RPAREN]
+  expr -> . LPAREN expr RPAREN [EOF]
+  expr -> . LPAREN expr RPAREN [PLUS]
+  expr -> . LPAREN expr RPAREN [MINUS]
+  expr -> . LPAREN expr RPAREN [STAR]
+  expr -> . LPAREN expr RPAREN [SLASH]
+  expr -> . LPAREN expr RPAREN [RPAREN]
+  expr -> . NUMBER [EOF]
+  expr -> . NUMBER [PLUS]
+  expr -> . NUMBER [MINUS]
+  expr -> . NUMBER [STAR]
+  expr -> . NUMBER [SLASH]
+  expr -> . NUMBER [RPAREN]
+
+Actions:
+  NUMBER  shift 2
+  MINUS  shift 3
+  LPAREN  shift 4
+
+Gotos:
+  expr  12
+
+State 7
+
+  expr -> . expr PLUS expr [EOF]
+  expr -> . expr PLUS expr [PLUS]
+  expr -> . expr PLUS expr [MINUS]
+  expr -> . expr PLUS expr [STAR]
+  expr -> . expr PLUS expr [SLASH]
+  expr -> . expr PLUS expr [RPAREN]
+  expr -> . expr MINUS expr [EOF]
+  expr -> . expr MINUS expr [PLUS]
+  expr -> . expr MINUS expr [MINUS]
+  expr -> . expr MINUS expr [STAR]
+  expr -> . expr MINUS expr [SLASH]
+  expr -> . expr MINUS expr [RPAREN]
+  expr -> expr MINUS . expr [EOF]
+  expr -> expr MINUS . expr [PLUS]
+  expr -> expr MINUS . expr [MINUS]
+  expr -> expr MINUS . expr [STAR]
+  expr -> expr MINUS . expr [SLASH]
+  expr -> expr MINUS . expr [RPAREN]
+  expr -> . expr STAR expr [EOF]
+  expr -> . expr STAR expr [PLUS]
+  expr -> . expr STAR expr [MINUS]
+  expr -> . expr STAR expr [STAR]
+  expr -> . expr STAR expr [SLASH]
+  expr -> . expr STAR expr [RPAREN]
+  expr -> . expr SLASH expr [EOF]
+  expr -> . expr SLASH expr [PLUS]
+  expr -> . expr SLASH expr [MINUS]
+  expr -> . expr SLASH expr [STAR]
+  expr -> . expr SLASH expr [SLASH]
+  expr -> . expr SLASH expr [RPAREN]
+  expr -> . MINUS expr [EOF]
+  expr -> . MINUS expr [PLUS]
+  expr -> . MINUS expr [MINUS]
+  expr -> . MINUS expr [STAR]
+  expr -> . MINUS expr [SLASH]
+  expr -> . MINUS expr [RPAREN]
+  expr -> . LPAREN expr RPAREN [EOF]
+  expr -> . LPAREN expr RPAREN [PLUS]
+  expr -> . LPAREN expr RPAREN [MINUS]
+  expr -> . LPAREN expr RPAREN [STAR]
+  expr -> . LPAREN expr RPAREN [SLASH]
+  expr -> . LPAREN expr RPAREN [RPAREN]
+  expr -> . NUMBER [EOF]
+  expr -> . NUMBER [PLUS]
+  expr -> . NUMBER [MINUS]
+  expr -> . NUMBER [STAR]
+  expr -> . NUMBER [SLASH]
+  expr -> . NUMBER [RPAREN]
+
+Actions:
+  NUMBER  shift 2
+  MINUS  shift 3
+  LPAREN  shift 4
+
+Gotos:
+  expr  13
+
+State 8
+
+  expr -> . expr PLUS expr [EOF]
+  expr -> . expr PLUS expr [PLUS]
+  expr -> . expr PLUS expr [MINUS]
+  expr -> . expr PLUS expr [STAR]
+  expr -> . expr PLUS expr [SLASH]
+  expr -> . expr PLUS expr [RPAREN]
+  expr -> . expr MINUS expr [EOF]
+  expr -> . expr MINUS expr [PLUS]
+  expr -> . expr MINUS expr [MINUS]
+  expr -> . expr MINUS expr [STAR]
+  expr -> . expr MINUS expr [SLASH]
+  expr -> . expr MINUS expr [RPAREN]
+  expr -> . expr STAR expr [EOF]
+  expr -> . expr STAR expr [PLUS]
+  expr -> . expr STAR expr [MINUS]
+  expr -> . expr STAR expr [STAR]
+  expr -> . expr STAR expr [SLASH]
+  expr -> . expr STAR expr [RPAREN]
+  expr -> expr STAR . expr [EOF]
+  expr -> expr STAR . expr [PLUS]
+  expr -> expr STAR . expr [MINUS]
+  expr -> expr STAR . expr [STAR]
+  expr -> expr STAR . expr [SLASH]
+  expr -> expr STAR . expr [RPAREN]
+  expr -> . expr SLASH expr [EOF]
+  expr -> . expr SLASH expr [PLUS]
+  expr -> . expr SLASH expr [MINUS]
+  expr -> . expr SLASH expr [STAR]
+  expr -> . expr SLASH expr [SLASH]
+  expr -> . expr SLASH expr [RPAREN]
+  expr -> . MINUS expr [EOF]
+  expr -> . MINUS expr [PLUS]
+  expr -> . MINUS expr [MINUS]
+  expr -> . MINUS expr [STAR]
+  expr -> . MINUS expr [SLASH]
+  expr -> . MINUS expr [RPAREN]
+  expr -> . LPAREN expr RPAREN [EOF]
+  expr -> . LPAREN expr RPAREN [PLUS]
+  expr -> . LPAREN expr RPAREN [MINUS]
+  expr -> . LPAREN expr RPAREN [STAR]
+  expr -> . LPAREN expr RPAREN [SLASH]
+  expr -> . LPAREN expr RPAREN [RPAREN]
+  expr -> . NUMBER [EOF]
+  expr -> . NUMBER [PLUS]
+  expr -> . NUMBER [MINUS]
+  expr -> . NUMBER [STAR]
+  expr -> . NUMBER [SLASH]
+  expr -> . NUMBER [RPAREN]
+
+Actions:
+  NUMBER  shift 2
+  MINUS  shift 3
+  LPAREN  shift 4
+
+Gotos:
+  expr  14
+
+State 9
+
+  expr -> . expr PLUS expr [EOF]
+  expr -> . expr PLUS expr [PLUS]
+  expr -> . expr PLUS expr [MINUS]
+  expr -> . expr PLUS expr [STAR]
+  expr -> . expr PLUS expr [SLASH]
+  expr -> . expr PLUS expr [RPAREN]
+  expr -> . expr MINUS expr [EOF]
+  expr -> . expr MINUS expr [PLUS]
+  expr -> . expr MINUS expr [MINUS]
+  expr -> . expr MINUS expr [STAR]
+  expr -> . expr MINUS expr [SLASH]
+  expr -> . expr MINUS expr [RPAREN]
+  expr -> . expr STAR expr [EOF]
+  expr -> . expr STAR expr [PLUS]
+  expr -> . expr STAR expr [MINUS]
+  expr -> . expr STAR expr [STAR]
+  expr -> . expr STAR expr [SLASH]
+  expr -> . expr STAR expr [RPAREN]
+  expr -> . expr SLASH expr [EOF]
+  expr -> . expr SLASH expr [PLUS]
+  expr -> . expr SLASH expr [MINUS]
+  expr -> . expr SLASH expr [STAR]
+  expr -> . expr SLASH expr [SLASH]
+  expr -> . expr SLASH expr [RPAREN]
+  expr -> expr SLASH . expr [EOF]
+  expr -> expr SLASH . expr [PLUS]
+  expr -> expr SLASH . expr [MINUS]
+  expr -> expr SLASH . expr [STAR]
+  expr -> expr SLASH . expr [SLASH]
+  expr -> expr SLASH . expr [RPAREN]
+  expr -> . MINUS expr [EOF]
+  expr -> . MINUS expr [PLUS]
+  expr -> . MINUS expr [MINUS]
+  expr -> . MINUS expr [STAR]
+  expr -> . MINUS expr [SLASH]
+  expr -> . MINUS expr [RPAREN]
+  expr -> . LPAREN expr RPAREN [EOF]
+  expr -> . LPAREN expr RPAREN [PLUS]
+  expr -> . LPAREN expr RPAREN [MINUS]
+  expr -> . LPAREN expr RPAREN [STAR]
+  expr -> . LPAREN expr RPAREN [SLASH]
+  expr -> . LPAREN expr RPAREN [RPAREN]
+  expr -> . NUMBER [EOF]
+  expr -> . NUMBER [PLUS]
+  expr -> . NUMBER [MINUS]
+  expr -> . NUMBER [STAR]
+  expr -> . NUMBER [SLASH]
+  expr -> . NUMBER [RPAREN]
+
+Actions:
+  NUMBER  shift 2
+  MINUS  shift 3
+  LPAREN  shift 4
+
+Gotos:
+  expr  15
+
+State 10
+
+  expr -> expr . PLUS expr [EOF]
+  expr -> expr . PLUS expr [PLUS]
+  expr -> expr . PLUS expr [MINUS]
+  expr -> expr . PLUS expr [STAR]
+  expr -> expr . PLUS expr [SLASH]
+  expr -> expr . PLUS expr [RPAREN]
+  expr -> expr . MINUS expr [EOF]
+  expr -> expr . MINUS expr [PLUS]
+  expr -> expr . MINUS expr [MINUS]
+  expr -> expr . MINUS expr [STAR]
+  expr -> expr . MINUS expr [SLASH]
+  expr -> expr . MINUS expr [RPAREN]
+  expr -> expr . STAR expr [EOF]
+  expr -> expr . STAR expr [PLUS]
+  expr -> expr . STAR expr [MINUS]
+  expr -> expr . STAR expr [STAR]
+  expr -> expr . STAR expr [SLASH]
+  expr -> expr . STAR expr [RPAREN]
+  expr -> expr . SLASH expr [EOF]
+  expr -> expr . SLASH expr [PLUS]
+  expr -> expr . SLASH expr [MINUS]
+  expr -> expr . SLASH expr [STAR]
+  expr -> expr . SLASH expr [SLASH]
+  expr -> expr . SLASH expr [RPAREN]
+  expr -> MINUS expr . [EOF]
+  expr -> MINUS expr . [PLUS]
+  expr -> MINUS expr . [MINUS]
+  expr -> MINUS expr . [STAR]
+  expr -> MINUS expr . [SLASH]
+  expr -> MINUS expr . [RPAREN]
+
+Actions:
+  EOF  reduce expr -> MINUS value=expr
+  PLUS  reduce expr -> MINUS value=expr
+  MINUS  reduce expr -> MINUS value=expr
+  STAR  reduce expr -> MINUS value=expr
+  SLASH  reduce expr -> MINUS value=expr
+  RPAREN  reduce expr -> MINUS value=expr
+
+Gotos:
+
+State 11
+
+  expr -> expr . PLUS expr [PLUS]
+  expr -> expr . PLUS expr [MINUS]
+  expr -> expr . PLUS expr [STAR]
+  expr -> expr . PLUS expr [SLASH]
+  expr -> expr . PLUS expr [RPAREN]
+  expr -> expr . MINUS expr [PLUS]
+  expr -> expr . MINUS expr [MINUS]
+  expr -> expr . MINUS expr [STAR]
+  expr -> expr . MINUS expr [SLASH]
+  expr -> expr . MINUS expr [RPAREN]
+  expr -> expr . STAR expr [PLUS]
+  expr -> expr . STAR expr [MINUS]
+  expr -> expr . STAR expr [STAR]
+  expr -> expr . STAR expr [SLASH]
+  expr -> expr . STAR expr [RPAREN]
+  expr -> expr . SLASH expr [PLUS]
+  expr -> expr . SLASH expr [MINUS]
+  expr -> expr . SLASH expr [STAR]
+  expr -> expr . SLASH expr [SLASH]
+  expr -> expr . SLASH expr [RPAREN]
+  expr -> LPAREN expr . RPAREN [EOF]
+  expr -> LPAREN expr . RPAREN [PLUS]
+  expr -> LPAREN expr . RPAREN [MINUS]
+  expr -> LPAREN expr . RPAREN [STAR]
+  expr -> LPAREN expr . RPAREN [SLASH]
+  expr -> LPAREN expr . RPAREN [RPAREN]
+
+Actions:
+  PLUS  shift 6
+  MINUS  shift 7
+  STAR  shift 8
+  SLASH  shift 9
+  RPAREN  shift 16
+
+Gotos:
+
+State 12
+
+  expr -> expr . PLUS expr [EOF]
+  expr -> expr . PLUS expr [PLUS]
+  expr -> expr . PLUS expr [MINUS]
+  expr -> expr . PLUS expr [STAR]
+  expr -> expr . PLUS expr [SLASH]
+  expr -> expr . PLUS expr [RPAREN]
+  expr -> expr PLUS expr . [EOF]
+  expr -> expr PLUS expr . [PLUS]
+  expr -> expr PLUS expr . [MINUS]
+  expr -> expr PLUS expr . [STAR]
+  expr -> expr PLUS expr . [SLASH]
+  expr -> expr PLUS expr . [RPAREN]
+  expr -> expr . MINUS expr [EOF]
+  expr -> expr . MINUS expr [PLUS]
+  expr -> expr . MINUS expr [MINUS]
+  expr -> expr . MINUS expr [STAR]
+  expr -> expr . MINUS expr [SLASH]
+  expr -> expr . MINUS expr [RPAREN]
+  expr -> expr . STAR expr [EOF]
+  expr -> expr . STAR expr [PLUS]
+  expr -> expr . STAR expr [MINUS]
+  expr -> expr . STAR expr [STAR]
+  expr -> expr . STAR expr [SLASH]
+  expr -> expr . STAR expr [RPAREN]
+  expr -> expr . SLASH expr [EOF]
+  expr -> expr . SLASH expr [PLUS]
+  expr -> expr . SLASH expr [MINUS]
+  expr -> expr . SLASH expr [STAR]
+  expr -> expr . SLASH expr [SLASH]
+  expr -> expr . SLASH expr [RPAREN]
+
+Actions:
+  EOF  reduce expr -> left=expr PLUS right=expr
+  PLUS  reduce expr -> left=expr PLUS right=expr
+  MINUS  reduce expr -> left=expr PLUS right=expr
+  STAR  shift 8
+  SLASH  shift 9
+  RPAREN  reduce expr -> left=expr PLUS right=expr
+
+Gotos:
+
+State 13
+
+  expr -> expr . PLUS expr [EOF]
+  expr -> expr . PLUS expr [PLUS]
+  expr -> expr . PLUS expr [MINUS]
+  expr -> expr . PLUS expr [STAR]
+  expr -> expr . PLUS expr [SLASH]
+  expr -> expr . PLUS expr [RPAREN]
+  expr -> expr . MINUS expr [EOF]
+  expr -> expr . MINUS expr [PLUS]
+  expr -> expr . MINUS expr [MINUS]
+  expr -> expr . MINUS expr [STAR]
+  expr -> expr . MINUS expr [SLASH]
+  expr -> expr . MINUS expr [RPAREN]
+  expr -> expr MINUS expr . [EOF]
+  expr -> expr MINUS expr . [PLUS]
+  expr -> expr MINUS expr . [MINUS]
+  expr -> expr MINUS expr . [STAR]
+  expr -> expr MINUS expr . [SLASH]
+  expr -> expr MINUS expr . [RPAREN]
+  expr -> expr . STAR expr [EOF]
+  expr -> expr . STAR expr [PLUS]
+  expr -> expr . STAR expr [MINUS]
+  expr -> expr . STAR expr [STAR]
+  expr -> expr . STAR expr [SLASH]
+  expr -> expr . STAR expr [RPAREN]
+  expr -> expr . SLASH expr [EOF]
+  expr -> expr . SLASH expr [PLUS]
+  expr -> expr . SLASH expr [MINUS]
+  expr -> expr . SLASH expr [STAR]
+  expr -> expr . SLASH expr [SLASH]
+  expr -> expr . SLASH expr [RPAREN]
+
+Actions:
+  EOF  reduce expr -> left=expr MINUS right=expr
+  PLUS  reduce expr -> left=expr MINUS right=expr
+  MINUS  reduce expr -> left=expr MINUS right=expr
+  STAR  shift 8
+  SLASH  shift 9
+  RPAREN  reduce expr -> left=expr MINUS right=expr
+
+Gotos:
+
+State 14
+
+  expr -> expr . PLUS expr [EOF]
+  expr -> expr . PLUS expr [PLUS]
+  expr -> expr . PLUS expr [MINUS]
+  expr -> expr . PLUS expr [STAR]
+  expr -> expr . PLUS expr [SLASH]
+  expr -> expr . PLUS expr [RPAREN]
+  expr -> expr . MINUS expr [EOF]
+  expr -> expr . MINUS expr [PLUS]
+  expr -> expr . MINUS expr [MINUS]
+  expr -> expr . MINUS expr [STAR]
+  expr -> expr . MINUS expr [SLASH]
+  expr -> expr . MINUS expr [RPAREN]
+  expr -> expr . STAR expr [EOF]
+  expr -> expr . STAR expr [PLUS]
+  expr -> expr . STAR expr [MINUS]
+  expr -> expr . STAR expr [STAR]
+  expr -> expr . STAR expr [SLASH]
+  expr -> expr . STAR expr [RPAREN]
+  expr -> expr STAR expr . [EOF]
+  expr -> expr STAR expr . [PLUS]
+  expr -> expr STAR expr . [MINUS]
+  expr -> expr STAR expr . [STAR]
+  expr -> expr STAR expr . [SLASH]
+  expr -> expr STAR expr . [RPAREN]
+  expr -> expr . SLASH expr [EOF]
+  expr -> expr . SLASH expr [PLUS]
+  expr -> expr . SLASH expr [MINUS]
+  expr -> expr . SLASH expr [STAR]
+  expr -> expr . SLASH expr [SLASH]
+  expr -> expr . SLASH expr [RPAREN]
+
+Actions:
+  EOF  reduce expr -> left=expr STAR right=expr
+  PLUS  reduce expr -> left=expr STAR right=expr
+  MINUS  reduce expr -> left=expr STAR right=expr
+  STAR  reduce expr -> left=expr STAR right=expr
+  SLASH  reduce expr -> left=expr STAR right=expr
+  RPAREN  reduce expr -> left=expr STAR right=expr
+
+Gotos:
+
+State 15
+
+  expr -> expr . PLUS expr [EOF]
+  expr -> expr . PLUS expr [PLUS]
+  expr -> expr . PLUS expr [MINUS]
+  expr -> expr . PLUS expr [STAR]
+  expr -> expr . PLUS expr [SLASH]
+  expr -> expr . PLUS expr [RPAREN]
+  expr -> expr . MINUS expr [EOF]
+  expr -> expr . MINUS expr [PLUS]
+  expr -> expr . MINUS expr [MINUS]
+  expr -> expr . MINUS expr [STAR]
+  expr -> expr . MINUS expr [SLASH]
+  expr -> expr . MINUS expr [RPAREN]
+  expr -> expr . STAR expr [EOF]
+  expr -> expr . STAR expr [PLUS]
+  expr -> expr . STAR expr [MINUS]
+  expr -> expr . STAR expr [STAR]
+  expr -> expr . STAR expr [SLASH]
+  expr -> expr . STAR expr [RPAREN]
+  expr -> expr . SLASH expr [EOF]
+  expr -> expr . SLASH expr [PLUS]
+  expr -> expr . SLASH expr [MINUS]
+  expr -> expr . SLASH expr [STAR]
+  expr -> expr . SLASH expr [SLASH]
+  expr -> expr . SLASH expr [RPAREN]
+  expr -> expr SLASH expr . [EOF]
+  expr -> expr SLASH expr . [PLUS]
+  expr -> expr SLASH expr . [MINUS]
+  expr -> expr SLASH expr . [STAR]
+  expr -> expr SLASH expr . [SLASH]
+  expr -> expr SLASH expr . [RPAREN]
+
+Actions:
+  EOF  reduce expr -> left=expr SLASH right=expr
+  PLUS  reduce expr -> left=expr SLASH right=expr
+  MINUS  reduce expr -> left=expr SLASH right=expr
+  STAR  reduce expr -> left=expr SLASH right=expr
+  SLASH  reduce expr -> left=expr SLASH right=expr
+  RPAREN  reduce expr -> left=expr SLASH right=expr
+
+Gotos:
+
+State 16
+
+  expr -> LPAREN expr RPAREN . [EOF]
+  expr -> LPAREN expr RPAREN . [PLUS]
+  expr -> LPAREN expr RPAREN . [MINUS]
+  expr -> LPAREN expr RPAREN . [STAR]
+  expr -> LPAREN expr RPAREN . [SLASH]
+  expr -> LPAREN expr RPAREN . [RPAREN]
+
+Actions:
+  EOF  reduce expr -> LPAREN value=expr RPAREN
+  PLUS  reduce expr -> LPAREN value=expr RPAREN
+  MINUS  reduce expr -> LPAREN value=expr RPAREN
+  STAR  reduce expr -> LPAREN value=expr RPAREN
+  SLASH  reduce expr -> LPAREN value=expr RPAREN
+  RPAREN  reduce expr -> LPAREN value=expr RPAREN
+
+Gotos:

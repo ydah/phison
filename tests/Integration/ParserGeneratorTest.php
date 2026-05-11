@@ -301,6 +301,27 @@ LRG);
         self::assertGreaterThan(0, $table->unresolvedConflictCount());
     }
 
+    public function testGeneratedParserMatchesGoldenFile(): void
+    {
+        $generated = (new ParserEmitter())->emit(self::$grammar, self::$table, new CodegenOptions())->contents;
+
+        $this->assertMatchesGolden('ArithmeticParser.golden.php', $generated);
+    }
+
+    public function testMarkdownReportMatchesGoldenFile(): void
+    {
+        $report = (new \Phison\Report\MarkdownReport())->render(self::$grammar, self::$collection, self::$table);
+
+        $this->assertMatchesGolden('arithmetic-report.golden.md', $report);
+    }
+
+    public function testAutomatonDumpMatchesGoldenFile(): void
+    {
+        $report = (new \Phison\Report\AutomatonReport())->render(self::$grammar, self::$collection, self::$table);
+
+        $this->assertMatchesGolden('arithmetic-automaton.golden.txt', $report);
+    }
+
     private function buildTable(string $source): ParseTable
     {
         $document = (new DslParser())->parse($source);
@@ -308,5 +329,21 @@ LRG);
         $collection = (new CanonicalLr1ThenMergeBuilder())->build($grammar);
 
         return (new ParseTableBuilder())->build($grammar, $collection);
+    }
+
+    private function assertMatchesGolden(string $fileName, string $actual): void
+    {
+        $expectedPath = __DIR__ . '/../Fixtures/expected/' . $fileName;
+
+        self::assertFileExists($expectedPath);
+        self::assertSame(
+            $this->normalizeNewlines(file_get_contents($expectedPath) ?: ''),
+            $this->normalizeNewlines($actual),
+        );
+    }
+
+    private function normalizeNewlines(string $contents): string
+    {
+        return str_replace("\r\n", "\n", $contents);
     }
 }
