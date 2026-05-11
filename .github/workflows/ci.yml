@@ -51,3 +51,6 @@ jobs:
 
       - name: Generate arithmetic parser
         run: composer generate:example
+
+      - name: Run arithmetic example
+        run: composer run:example

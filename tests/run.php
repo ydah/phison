@@ -11,6 +11,7 @@ use Phison\CodeGen\ParserEmitter;
 use Phison\Dsl\DslParser;
 use Phison\Grammar\GrammarNormalizer;
 use Phison\Lalr\CanonicalLr1ThenMergeBuilder;
+use Phison\Lalr\Conflict;
 use Phison\Lalr\ParseTableBuilder;
 use Phison\Runtime\ParseError;
 
@@ -127,6 +128,129 @@ $ambiguousCollection = (new CanonicalLr1ThenMergeBuilder())->build($ambiguousGra
 $ambiguousTable = (new ParseTableBuilder())->build($ambiguousGrammar, $ambiguousCollection);
 if ($ambiguousTable->unresolvedConflictCount() === 0) {
     throw new RuntimeException('Expected ambiguous arithmetic to report unresolved conflicts.');
+}
+
+$danglingElse = <<<'LRG'
+grammar DanglingElse
+start stmt
+
+token IF
+token EXPR
+token THEN
+token ELSE
+token OTHER
+
+rule stmt {
+    IF EXPR THEN stmt => php {
+        return null;
+    }
+
+  | IF EXPR THEN stmt ELSE stmt => php {
+        return null;
+    }
+
+  | OTHER => php {
+        return null;
+    }
+}
+LRG;
+
+$danglingDocument = (new DslParser())->parse($danglingElse);
+$danglingGrammar = (new GrammarNormalizer())->normalize($danglingDocument);
+$danglingCollection = (new CanonicalLr1ThenMergeBuilder())->build($danglingGrammar);
+$danglingTable = (new ParseTableBuilder())->build($danglingGrammar, $danglingCollection);
+if ($danglingTable->unresolvedConflictCount() === 0) {
+    throw new RuntimeException('Expected dangling else grammar to report an unresolved conflict.');
+}
+
+$resolvedDanglingElse = <<<'LRG'
+grammar ResolvedDanglingElse
+start stmt
+
+token IF
+token EXPR
+token THEN
+token ELSE
+token OTHER
+
+precedence right THEN
+precedence right ELSE
+
+rule stmt {
+    IF EXPR THEN stmt %prec THEN => php {
+        return null;
+    }
+
+  | IF EXPR THEN stmt ELSE stmt => php {
+        return null;
+    }
+
+  | OTHER => php {
+        return null;
+    }
+}
+LRG;
+
+$resolvedDanglingDocument = (new DslParser())->parse($resolvedDanglingElse);
+$resolvedDanglingGrammar = (new GrammarNormalizer())->normalize($resolvedDanglingDocument);
+$resolvedDanglingCollection = (new CanonicalLr1ThenMergeBuilder())->build($resolvedDanglingGrammar);
+$resolvedDanglingTable = (new ParseTableBuilder())->build($resolvedDanglingGrammar, $resolvedDanglingCollection);
+if ($resolvedDanglingTable->unresolvedConflictCount() !== 0) {
+    throw new RuntimeException('Expected precedence-resolved dangling else grammar to have no unresolved conflicts.');
+}
+
+$lalrSpecific = <<<'LRG'
+grammar LalrSpecific
+start s
+
+token A_T
+token B_T
+token C_T
+token D_T
+token E_T
+
+rule s {
+    A_T x D_T => php {
+        return null;
+    }
+
+  | B_T y D_T => php {
+        return null;
+    }
+
+  | A_T y E_T => php {
+        return null;
+    }
+
+  | B_T x E_T => php {
+        return null;
+    }
+}
+
+rule x {
+    C_T => php {
+        return null;
+    }
+}
+
+rule y {
+    C_T => php {
+        return null;
+    }
+}
+LRG;
+
+$lalrDocument = (new DslParser())->parse($lalrSpecific);
+$lalrGrammar = (new GrammarNormalizer())->normalize($lalrDocument);
+$lalrCollection = (new CanonicalLr1ThenMergeBuilder())->build($lalrGrammar);
+$lalrTable = (new ParseTableBuilder())->build($lalrGrammar, $lalrCollection);
+$lalrHasReduceReduce = false;
+foreach ($lalrTable->conflicts as $conflict) {
+    $lalrHasReduceReduce = $lalrHasReduceReduce || $conflict->kind === Conflict::REDUCE_REDUCE;
+}
+
+if (!$lalrHasReduceReduce) {
+    throw new RuntimeException('Expected LALR-specific grammar to report a reduce/reduce conflict.');
 }
 
 $reduceReduce = <<<'LRG'
